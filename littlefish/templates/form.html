@@ -1,0 +1,35 @@
+{% extends '_layout.jinja2' %}
+
+{% macro wtfield(field) %}
+  {% if field.name != 'csrf' %}
+	{% if field.errors %}
+	  {{ field.label(title=', '.join(field.errors)) }}
+	{% else %}
+	  {{ field.label() }}
+	{% endif %}
+  {% endif %}
+  {{ field(**kwargs) | safe }}
+{% endmacro %}
+
+{% macro inner_wtform(form) %}
+  {% for field, _ in form._unbound_fields %}
+    {{ wtfield(form.__dict__[field]) | safe }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro wtform(form, url="", submittxt="Valider") %}
+  <form method="post" action="{{ url }}" enctype="multipart/form-data">
+    {{ inner_wtform(form) | safe }}
+    <input type="submit" id="{{submittxt}}" name="{{submittxt}}" value="{{submittxt}}"/>
+  </form>
+{% endmacro %}
+
+
+{% block title %} {{ title }} {% endblock title %}
+
+{% block content %}
+  <article>
+	<h2>{{ title }}</h2>
+	{{ wtform(form, url) | safe }}
+  </article>
+{% endblock content %}

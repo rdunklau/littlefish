@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+<title>Littlefish</title>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.6.2.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-ui-1.8.16.custom.min.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}" />
+<link rel="stylesheet" href="{{url_for('static', filename='css/cupertino/jquery-ui-1.8.16.custom.css')}}" />
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
+</head>
+<body>
+<h1>{% block title %}Little fish{% endblock title %}</h1>
+<section class="content">
+{% block content %}{% endblock content %}
+</section>
+</body>
+
+
+</html>
+

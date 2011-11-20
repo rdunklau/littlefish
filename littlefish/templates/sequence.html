@@ -1,0 +1,13 @@
+{% block title %} Séquence : {{sequence.title}} {% endblock title %}
+
+{% block content %}
+  <article>
+	<h2>{{ sequence.title }}</h2>
+	<dl>
+	  <dt>Niveau</dt><dd>{{sequence.class.label}}</dd>
+	  <dt>Domaine disciplinaire</dt><dd>{{sequence.domain.label}}</dd>
+	  <dt>Discipline</dt><dd>{{sequence.subject.label}}</dd>
+	</dl>
+
+  </article>
+{% endblock %}
