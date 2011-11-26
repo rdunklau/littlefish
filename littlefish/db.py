@@ -19,7 +19,7 @@ class Seance(db.Model):
 
 class Sequence(db.Model):
     __table__ = table('sequence')
-
+    topic_assoc = relationship('TopicDomainClass', backref='sequences')
 
 class Etape(db.Model):
     __table__ = table('etape')
@@ -36,9 +36,6 @@ class DomainClass(db.Model):
     domain = relationship(Domain)
     grade = relationship(Class)
 
-class Hardware(db.Model):
-    __table__ = table('hardware')
-
 class Topic(db.Model):
     __table__ = table('topic')
 
@@ -49,3 +46,5 @@ class TopicDomainClass(db.Model):
             (__table__.c.class_code == table('domain_class').c.class_code) &
             (__table__.c.domain_code == table('domain_class').c.domain_code)))
     topic = relationship('Topic')
+    grade = relationship('Class')
+    domain = relationship('Domain')

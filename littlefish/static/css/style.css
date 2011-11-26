@@ -46,3 +46,43 @@ form input, form .dijitTextBox, form .dijitSelect{
   clear: both;
   display: block;
 }
+
+ul[data-islist] li input, ul[data-islist] li .dijitTextBox{
+  display: inline-block;
+}
+
+ul[data-islist] li {
+  display: inline-block;
+  list-style: none;
+  margin-right: 10px;
+}
+
+.removeButton {
+  width: 16px;
+  cursor: pointer;
+  height: 16px;
+  line-height: 24px;
+  background-image: url('/static/img/del.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.addButton {
+  clear: both;
+}
+
+header {
+  height: 40px;
+}
+
+header form input, header form label {
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+header form {
+  float: right;
+}

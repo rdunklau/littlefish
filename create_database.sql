@@ -116,9 +116,12 @@ create table topic_domain_class (
   id serial primary key,
   class_code character varying,
   domain_code character varying,
-  topic_code character varying references topic(code),
+  topic_code character varying,
   unique (class_code, domain_code, topic_code),
-  foreign key (class_code, domain_code) references domain_class(class_code, domain_code)
+  foreign key (class_code, domain_code) references domain_class(class_code, domain_code),
+  foreign key (class_code) references class(code),
+  foreign key (domain_code) references domain(code),
+  foreign key (topic_code) references topic(code)
 );
 
 
@@ -175,6 +178,35 @@ INSERT INTO topic_domain_class (class_code, domain_code, topic_code) VALUES
 
 
 
+
+create table sequence_attrs (
+  	code character varying primary key,
+	label character varying
+);
+
+insert into sequence_attrs(code, label) VALUES
+	('DECOUVERTE', 'Découverte'),
+	('RECHERCHE', 'Recherche/Manipulation'),
+	('REINVESTISSEMENT', 'Réinvestissement'),
+	('EVALUATION', 'Évaluation');
+
+create table sequence (
+    id serial primary key,
+    title character varying not null,
+	topic_domain_class integer references topic_domain_class(id),
+	programmes character varying[],
+	socles character varying[],
+	prerequis character varying[],
+	competences character varying[],
+	objectifs character varying[],
+	taches character varying[],
+	roles character varying[],
+	materiel_pe character varying[],
+	materiel_eleve character varying[],
+    period integer
+);
+
+
 create table seance (
     id serial primary key,
     sequence integer references sequence(id),
@@ -192,22 +224,3 @@ create table etape (
     primary key (ordinal, seance)
 );
 
-create table hardware (
-    id serial primary key
-);
-
-create table sequence (
-    id serial primary key,
-    title character varying not null,
-	topic_domain_class integer references topic_domain_class(id),
-	programmes character varying[],
-	socles character varying[],
-	prerequis character varying[],
-	competences character varying[],
-	objectifs character varying[],
-	taches character varying[],
-	roles character varying[],
-	materiel_pe character varying[],
-	materiel_eleve character varying[]
-    period integer
-);

@@ -1,6 +1,6 @@
 import json
 
-from flask import render_template
+from flask import render_template, request
 from flaskext import wtf as flaskwtf
 
 from wtforms import widgets as wtfwidgets
@@ -18,6 +18,7 @@ class DojoInput(wtfwidgets.Input):
         attrs.setdefault('type', self.input_type)
         attrs.setdefault('dojoType', self.dojo_type)
         attrs.setdefault('name', field.name)
+        attrs.setdefault('value', field.data)
         for validator in field.validators:
             if isinstance(validator, validators.Required):
                 attrs['required'] = 'true'
@@ -59,11 +60,13 @@ class TreeLevel(object):
 
 class TreeSelect(wtfwidgets.TextInput, DojoInput):
 
-    def render(self, level, id, name, parent=None):
+    def render(self, level, id, name, parent=None, value=None):
         attrs = {}
         attrs['id'] = id
         attrs['name'] = name
         attrs['data-datastore-url'] = level.url
+        attrs['data-treeselect'] = True
+        attrs['value'] = value
         if parent is not None:
             attrs['data-parent'] = parent
         attrs['data-dojo-store'] = ('new dojo.data.ItemFileReadStore({url:'
@@ -84,10 +87,12 @@ class TreeSelect(wtfwidgets.TextInput, DojoInput):
                 parent = '%s-level%i' % (field.id, idx - 1)
             else:
                 parent = None
-            html_string += self.render(level, id, name, parent)
+            html_string += self.render(level, id, name, parent,
+                    value=field.levels_values[idx])
         level = field.levels[-1]
         parent = '%s-level%i' % (field.id, idx)
-        html_string += self.render(level, field.id, field.name, parent)
+        html_string += self.render(level, field.id, field.name, parent,
+                value=field.levels_values[-1])
         return wtfwidgets.HTMLString(html_string)
 
         
@@ -97,4 +102,39 @@ class TreeField(wtffields.TextField):
 
     def __init__(self, *args, **kwargs):
         self.levels = kwargs.pop('levels')
+        self.levels_values = [None for i in range(len(self.levels))]
         super(TreeField, self).__init__(*args, **kwargs)
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = valuelist[0]
+            self.levels_values = []
+            for idx in range(len(self.levels) - 1):
+                self.levels_values.append(request.form.get('%s-level%i' % (
+                    self.name, idx)))
+            self.levels_values.append(self.data)
+
+
+
+class ListInput(wtfwidgets.TextInput):
+
+    def __call__(self, field, **kwargs):
+        attrs = {}
+        attrs['id'] = field.id
+        attrs['name'] = field.name
+        attrs['data-datastore-url'] = field.url
+        return wtfwidgets.HTMLString(render_template('wtforms/list.jinja2',
+            attrs=attrs, values=field.data or [], **kwargs))
+
+
+class ListField(wtffields.TextField):
+
+    widget = ListInput()
+
+    def __init__(self, *args, **kwargs):
+        self.url = kwargs.pop('url')
+        super(ListField, self).__init__(*args, **kwargs)
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = valuelist

@@ -1,12 +1,13 @@
+{% extends '_layout.jinja2' %}
 {% block title %} Séquence : {{sequence.title}} {% endblock title %}
 
 {% block content %}
   <article>
 	<h2>{{ sequence.title }}</h2>
 	<dl>
-	  <dt>Niveau</dt><dd>{{sequence.class.label}}</dd>
-	  <dt>Domaine disciplinaire</dt><dd>{{sequence.domain.label}}</dd>
-	  <dt>Discipline</dt><dd>{{sequence.subject.label}}</dd>
+	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
+	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
+	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
 	</dl>
 
   </article>

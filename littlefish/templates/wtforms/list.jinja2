@@ -1,0 +1,7 @@
+<ul data-islist="true">
+  {% for value in values %}
+	<li><input type="text" {{ attrs | xmlattr }} value="{{value}}"/></li>
+  {% else %}
+	<li><input type="text" {{ attrs | xmlattr }}/></li>
+  {% endfor %}
+</ul>
