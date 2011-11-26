@@ -19,12 +19,6 @@ insert into class (code, label) VALUES
     ('CM1', 'Cours Moyen 1'),
     ('CM2', 'Cours Moyen 2');
 
-create table sequence (
-    id serial primary key,
-    title character varying not null,
-    class_code character varying references class(code) not null,
-    period integer
-);
 
 create table domain (
 	code character varying primary key,
@@ -50,9 +44,10 @@ insert into domain (code, label) values
 
 
 create table domain_class (
+  id serial primary key,
   class_code character varying references class(code),
   domain_code character varying references domain(code),
-  primary key (class_code, domain_code)
+  unique (class_code, domain_code)
 );
 
 insert into domain_class (class_code, domain_code)  VALUES
@@ -118,10 +113,11 @@ create table topic (
 );
 
 create table topic_domain_class (
+  id serial primary key,
   class_code character varying,
   domain_code character varying,
   topic_code character varying references topic(code),
-  primary key (class_code, domain_code, topic_code),
+  unique (class_code, domain_code, topic_code),
   foreign key (class_code, domain_code) references domain_class(class_code, domain_code)
 );
 
@@ -198,4 +194,20 @@ create table etape (
 
 create table hardware (
     id serial primary key
+);
+
+create table sequence (
+    id serial primary key,
+    title character varying not null,
+	topic_domain_class integer references topic_domain_class(id),
+	programmes character varying[],
+	socles character varying[],
+	prerequis character varying[],
+	competences character varying[],
+	objectifs character varying[],
+	taches character varying[],
+	roles character varying[],
+	materiel_pe character varying[],
+	materiel_eleve character varying[]
+    period integer
 );

@@ -36,3 +36,13 @@ section.content {
         rgb(232,232,232) 53%
     );
 }
+
+form label {
+  clear: both;
+  display: inline-block;
+}
+
+form input, form .dijitTextBox, form .dijitSelect{
+  clear: both;
+  display: block;
+}

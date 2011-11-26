@@ -1,20 +1,22 @@
 <!doctype html>
 <html>
 <head>
-<title>Littlefish</title>
-<script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.6.2.min.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='js/jquery-ui-1.8.16.custom.min.js')}}"></script>
-<link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}" />
-<link rel="stylesheet" href="{{url_for('static', filename='css/cupertino/jquery-ui-1.8.16.custom.css')}}" />
-<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
+  <title>Littlefish</title>
+  <script src="http://yandex.st/dojo/1.6.1/dojo/dojo.xd.js" type="text/javascript" data-dojo-config="parseOnLoad: true"></script>
+  <script src="http://yandex.st/dojo/1.6.1/dijit/dijit.xd.js" type="text/javascript"></script>
+  <script src="http://yandex.st/dojo/1.6.1/dijit/dijit-all.xd.js" type="text/javascript"></script>
+  <script src="/static/js/coffee-script.js"></script>
+  <script type="text/coffeescript" src="/static/coffee/forms.coffee"></script>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
+  <link rel="stylesheet" href="http://yandex.st/dojo/1.6.1/dijit/themes/nihilo/nihilo.css" />
+
 </head>
-<body>
-<h1>{% block title %}Little fish{% endblock title %}</h1>
-<section class="content">
-{% block content %}{% endblock content %}
-</section>
+<body class="nihilo">
+  <h1>{% block title %}Little fish{% endblock title %}</h1>
+  <section class="content">
+  {% block content %}{% endblock content %}
+  </section>
 </body>
-
-
 </html>
 

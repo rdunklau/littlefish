@@ -36,8 +36,6 @@ class DomainClass(db.Model):
     domain = relationship(Domain)
     grade = relationship(Class)
 
-
-
 class Hardware(db.Model):
     __table__ = table('hardware')
 
@@ -50,5 +48,4 @@ class TopicDomainClass(db.Model):
         primaryjoin=(
             (__table__.c.class_code == table('domain_class').c.class_code) &
             (__table__.c.domain_code == table('domain_class').c.domain_code)))
-            
     topic = relationship('Topic')
