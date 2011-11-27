@@ -206,24 +206,27 @@ create table sequence (
     period integer
 );
 
-
 create table seance (
     id serial primary key,
     sequence_id integer references sequence(id),
-    title character varying
+	ordinal integer,
+    title character varying,
+	unique (sequence_id, ordinal)
 );
 
-
 create table etape (
+  	etape_id serial primary key not null,
     ordinal integer,
     seance_id integer references seance(id),
+	title character varying,
     time interval,
 	objectif text,
 	dispositif character varying[],
 	deroulement character varying[],
-	materiel character varying[],
-	consignes_criters character varying,
+	materiel_pe character varying[],
+	materiel_eleve character varying[],
+	consignes_criteres character varying,
     pe_role character varying[],
-    primary key (ordinal, seance_id)
+    unique (ordinal, seance_id)
 );
 

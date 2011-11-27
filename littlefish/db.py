@@ -1,6 +1,6 @@
 from flaskext.sqlalchemy import SQLAlchemy
 
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 
 from . import app
@@ -16,17 +16,28 @@ def table(tablename):
 
 class Seance(db.Model):
     __table__ = table('seance')
-    sequence = relationship('Sequence', backref='seances')
+    sequence = relationship('Sequence', backref=backref('seances',
+        lazy='joined'),
+            lazy='joined')
 
 
 class Sequence(db.Model):
     __table__ = table('sequence')
-    topic_assoc = relationship('TopicDomainClass', backref='sequences')
+    topic_assoc = relationship('TopicDomainClass', backref=backref('sequences',
+        lazy='joined'),
+            lazy='joined')
 
 
 class Etape(db.Model):
     __table__ = table('etape')
-    seance = relationship('Seance', backref='etapes')
+    seance = relationship('Seance', backref=backref('etapes', lazy='joined'),
+            lazy='joined')
+
+    @property
+    def rowspan(self):
+        return max(len(self.materiel_pe) + len(materiel_eleve),
+                   len(self.dispositif),
+                   len(self.deroulement))
 
 
 class Class(db.Model):
@@ -39,8 +50,8 @@ class Domain(db.Model):
 
 class DomainClass(db.Model):
     __table__ = table('domain_class')
-    domain = relationship(Domain)
-    grade = relationship(Class)
+    domain = relationship(Domain, lazy='joined')
+    grade = relationship(Class, lazy='joined')
 
 
 class Topic(db.Model):
@@ -50,9 +61,10 @@ class Topic(db.Model):
 class TopicDomainClass(db.Model):
     __table__ = table('topic_domain_class')
     domain_class = relationship(DomainClass,
+        lazy='joined',
         primaryjoin=(
             (__table__.c.class_code == table('domain_class').c.class_code) &
             (__table__.c.domain_code == table('domain_class').c.domain_code)))
-    topic = relationship('Topic')
-    grade = relationship('Class')
-    domain = relationship('Domain')
+    topic = relationship('Topic', lazy='joined')
+    grade = relationship('Class', lazy='joined')
+    domain = relationship('Domain', lazy='joined')

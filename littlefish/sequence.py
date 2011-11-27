@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, g
 from littlefish import app
 from littlefish.db import db, Class, Sequence, DomainClass, TopicDomainClass,\
     Domain, Topic
@@ -45,15 +45,24 @@ class SequenceForm(Form):
     topic_domain_class = TreeField(u'Niveau/Discipline', levels=[
         TreeLevel('Domaine Disciplinaire', '/sequence/xhr/Domain'),
         TreeLevel('Discipline', '/sequence/xhr/Topic')])
-    programmes = ListField('Programmes', url='/xhr/suggest/programmes')
-    prerequis = ListField(u'Prérequis', url='/xhr/suggest/prerequis')
-    competences = ListField(u'Compétences', url='/xhr/suggest/competences')
-    objectifs = ListField(u'Objectifs', url='/xhr/suggest/objectifs')
-    taches = ListField(u'Tâches', url='/xhr/suggest/taches')
-    roles = ListField(u'Rôles', url='/xhr/suggest/roles')
-    materiel_pe = ListField(u'Matériel PE', url='/xhr/suggest/materiel_pe')
+    programmes = ListField('Programmes',
+            url='/xhr/suggest/Sequence/programmes')
+    socles = ListField('Socles communs',
+            url='/xhr/suggest/Sequence/socles')
+    prerequis = ListField(u'Prérequis',
+            url='/xhr/suggest/Sequence/prerequis')
+    competences = ListField(u'Compétences',
+            url='/xhr/suggest/Sequence/competences')
+    objectifs = ListField(u'Objectifs',
+            url='/xhr/suggest/Sequence/objectifs')
+    taches = ListField(u'Tâches',
+            url='/xhr/suggest/Sequence/taches')
+    roles = ListField(u'Rôles',
+            url='/xhr/suggest/Sequence/roles')
+    materiel_pe = ListField(u'Matériel PE',
+            url='/xhr/suggest/Sequence/materiel_pe')
     materiel_eleve = ListField(u'Matériel élève',
-            url='/xhr/suggest/materiel_eleve')
+            url='/xhr/suggest/Sequence/materiel_eleve')
 
 
 @app.route('/sequence/<int:sequence_id>')
@@ -65,6 +74,7 @@ def sequence(sequence_id):
 @app.route('/sequence/<int:sequence_id>/edit', methods=('GET', 'POST'))
 def edit_sequence(sequence_id):
     seq = Sequence.query.get_or_404(sequence_id)
+    g.breadcrumb = [(seq.title, url_for('sequence', sequence_id=sequence_id))]
     form = SequenceForm(obj=seq)
     if form.validate_on_submit():
         form.populate_obj(seq)

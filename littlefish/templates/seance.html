@@ -1,0 +1,63 @@
+{% extends '_layout.jinja2' %}
+{% block title %} {{seance.title}} <a class="editIcon" title="Modifier" href="{{url_for('edit_seance', seance_id=seance.id)}}">Modifier</a> {% endblock title %}
+
+{% block content %}
+<article>
+    <h2>Étapes <a title="Ajouter une étape" class="addIcon" href="{{url_for('add_etape', seance_id=seance.id)}}">Ajouter</a></h2>
+	<table class="seance_table">
+	  <thead>
+		<tr>
+		<th colspan="2">Étapes (temps)</th>
+		<th>Objectif</th>
+		<th>Dispositif</th>
+		<th>Déroulement</th>
+		<th>Matériel</th>
+		<th>Consignes / Critère de réussite</th>
+		<th>Rôle PE</th>
+	  </tr>
+	  </thead>
+	  <tbody>
+	  {% for etape in seance.etapes %}
+	  <tr>
+		<td><a class="editIcon" href="{{url_for('edit_etape', seance_id=seance.id, ordinal=etape.ordinal)}}" title="Édition">modifier</a></td>
+		<td>{{etape.title}} {{etape.time}} </td>
+		<td>{{etape.objectif}}</td>
+		<td>
+		  <ul>
+			{% for dispositif in etape.dispositif or []%}
+			<li>{{dispositif}}</li>
+			{% endfor %}
+		  </ul>
+		</td>
+		<td>
+		  <ul>
+			{% for deroulement in etape.deroulement or []%}
+			<li>{{deroulement}}</li>
+			{% endfor %}
+		  </ul>
+		</td>
+		<td>
+		  <ul>
+			{% for materiel in (etape.materiel_pe + etape.materiel_eleve) or []%}
+			<li>{{materiel}}</li>
+			{% endfor %}
+		  </ul>
+		</td>
+		<td>{{etape.consignes_criteres}}</td>
+		<td>
+			<ul>
+			{% for role in etape.pe_role or []%}
+			<li>{{role}}</li>
+			{% endfor %}
+		  </ul>
+		</td>
+	  </tr>
+	  {% else %}
+	  <tr><td colspan="7">Aucune étape pour le moment</td></tr>
+	  {% endfor %}
+	  </tbody>
+	</table>
+	</ul>
+
+  </article>
+{% endblock %}

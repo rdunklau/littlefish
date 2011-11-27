@@ -1,21 +1,20 @@
 {% extends '_layout.jinja2' %}
 
-{% block title %} Accueil {% endblock title %}
-
+{% block title %}
+Séquences <a title="Ajouter une séquence" class="addIcon" href="{{url_for('add_sequence')}}">Ajouter</a>
+{% endblock title %}
 {% block content %}
-<ul>
-	<a href="/sequence/add/">Ajouter une séquence</a>
-	{% for seq in sequences %}
+{% for domain_code, sequences in sequences  | groupby('topic_assoc.domain_code') %}
+	<section>
+	<h3>{{sequences[0].topic_assoc.domain.label}}</h3>
+	<ul>
+	  {% for sequence in sequences %}
 	<li>
-	<a href="/sequence/{{seq.id}}">Séquence {{seq.title}}</a>
-	<dl>
-	  <dt>Nb de séances</dt><dd>{{seq.seances | count }}</dd>
-	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
-	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
-	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
-	</dl>
-	
+	  {% set count = sequence.seances | count %}
+	  <a href="/sequence/{{sequence.id}}">{{sequence.title}} ( {{count}} séance{{'s' if count > 1 }} ) </a>
 	</li>
 	{% endfor %}
-  </ul>
+    </ul>
+	</section>
+{% endfor %}
 {% endblock content %}

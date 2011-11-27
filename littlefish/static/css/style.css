@@ -1,5 +1,4 @@
 html, body {
-height: 100%;
 background-image: -webkit-gradient(
     linear,
     center bottom,
@@ -14,6 +13,10 @@ background-image: -moz-linear-gradient(
 );
 }
 
+body {
+  padding-bottom: 40px;
+}
+
 header {
 }
 
@@ -22,7 +25,9 @@ section.content {
     -moz-border-radius: 15px;
     border-radius: 15px;
     border: black;
-    margin: 90px;
+    margin-left: 90px;
+    margin-right: 90px;
+	margin-top: 40px;
     background-image: -webkit-gradient(
         linear,
         left top,
@@ -74,6 +79,49 @@ ul[data-islist] li {
   clear: both;
 }
 
+.addIcon{
+  width: 32px;
+  cursor: pointer;
+  height: 32px;
+  line-height: 48px;
+  background-image: url('/static/img/add.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.editIcon{
+  width: 32px;
+  cursor: pointer;
+  height: 32px;
+  line-height: 48px;
+  background-image: url('/static/img/edit.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  pediting: 0;
+  display: inline-block;
+}
+
+
+.pdfIcon{
+  width: 32px;
+  cursor: pointer;
+  height: 32px;
+  line-height: 48px;
+  background-image: url('/static/img/pdf.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  ppdfing: 0;
+  display: inline-block;
+}
+
+
+
+
 header {
   height: 40px;
 }
@@ -85,4 +133,121 @@ header form input, header form label {
 
 header form {
   float: right;
+}
+
+
+dd, dt{
+  min-height: 2em;
+}
+
+dd {
+  margin-right: 10px;
+  display: inline-block;
+}
+
+dt {
+  font-weight: bold;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+dt:after {
+  content: ":"
+}
+
+dl {
+  display: inline-block;
+}
+
+table td, table th {
+  border: solid 1px black;
+  padding: 6px;
+}
+
+
+table  li {
+  margin-left: 25px;
+}
+
+table.sequence_table tr td:first-child {
+  font-weight: bold;
+}
+
+table.seance_table th {
+  font-weight: bold;
+}
+
+table.seance_table tr td:first-child {
+  border-right: none;
+}
+
+table.seance_table tr td:nth-child(2) {
+  border-left: none;
+}
+
+
+
+a, a:visited {
+  color: #0042A2;
+  text-decoration: none;
+}
+
+h1, h2 {
+  color: #0084B4;
+  font-size: 2em;
+}
+
+h3 {
+  color: #0084B4;
+  font-size: 1.6em;
+}
+
+ul {
+  list-style: disc;
+}
+
+.preslist ul {
+  margin-left: 40px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table ul {
+  list-style: dash;
+}
+
+header {
+  background-color: black;
+  color: #00A6D6;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 1.3em;
+}
+
+ul.breadcrumb {
+  list-style: none;
+  display: inline;
+  float: left;
+}
+
+ul.breadcrumb a {
+  color: #00A6D6;
+}
+
+ul.breadcrumb a:visited {
+  color: #00A5D6;
+}
+
+ul.breadcrumb li {
+  display: inline-block;
+}
+
+ul.breadcrumb li:before {
+  content: ' > '
+}
+
+ul.breadcrumb li:first-child:before {
+  content: ''
 }

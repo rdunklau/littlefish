@@ -1,22 +1,54 @@
 {% extends '_layout.jinja2' %}
-{% block title %} Séquence : {{sequence.title}} {% endblock title %}
+{% block title %} Séquence : {{sequence.title}} <a class="editIcon" title="Modifier" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Modifier</a>{% endblock title %}
+
+{% macro gen_ligne(title, attr, sequence) %}
+  <tr>
+	<td>{{title}}</td>
+	<td>
+	  <ul>
+		{% for value in sequence[attr] or [] %}
+		  <li>{{value}}</li>
+		{% endfor %}
+	  </ul>
+	 </td>
+  </tr>
+{% endmacro %}
 
 {% block content %}
   <article>
-	<h2>{{ sequence.title }}</h2>
 	<dl>
 	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
 	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
 	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
 	</dl>
-	<a href="{{url_for('add_seance', sequence_id=sequence.id)}}">Ajouter une séance</a>
+	<table class="sequence_table">
+	  <tbody>
+		{{ gen_ligne('Programmes', 'programmes', sequence) }}
+		{{ gen_ligne('Socle Commun', 'socles', sequence) }}
+		{{ gen_ligne('Pré-requis', 'prerequis', sequence) }}
+		{{ gen_ligne('Compétenes visées', 'competences', sequence) }}
+		{{ gen_ligne('Objectifs', 'objectifs', sequence) }}
+		{{ gen_ligne("Tâches de l'élève", 'taches', sequence) }}
+		{{ gen_ligne("Rôles de l'enseignant", 'roles', sequence) }}
+		{{ gen_ligne("Matériel PE", 'materiel_pe', sequence) }}
+		{{ gen_ligne("Matériel élève", 'materiel_eleve', sequence) }}
+	  </tbody>
+	</table>
+
+
+
+
+	</tbody>
+  </table>
+  <section class="preslist">
+    <h2>Séances <a title="Ajouter une séance" class="addIcon" href="{{url_for('add_seance', sequence_id=sequence.id)}}">Ajouter</a></h2>
 	<ul>	
 	  {% for seance in sequence.seances %}
-	  <li><a href="{{url_for('seance', seance_id=seance.id)}}">{{seance.title}}</a></li>
+	  <li><a href="{{url_for('seance', seance_id=seance.id)}}">{{seance.title}} ({{seance.etapes | count }} étape{{'s' if seance.etapes|count > 1}})</a></li>
 	  {% else %}
 		<li>Aucune séance pour le moment</li>
 	  {% endfor %}
 	</ul>
-
+	</section>
   </article>
 {% endblock %}

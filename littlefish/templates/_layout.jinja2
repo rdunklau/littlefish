@@ -13,6 +13,12 @@
 </head>
 <body class="nihilo">
   <header>
+  <ul class="breadcrumb">
+	<li><a href="/">Accueil</a></li>
+  {% for link, url in g.breadcrumb %}
+	<li><a href="{{url}}">{{link}}</a></li>
+  {% endfor %}
+  </ul>
   {% if session.classe %}
   <form action="{{url_for('change_class')}}" method="post">
 	<label for="class">Classe</label>
