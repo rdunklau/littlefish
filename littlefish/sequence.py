@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, redirect, url_for, request, session, g
+from flask.helpers import make_response
 from littlefish import app
 from littlefish.db import db, Class, Sequence, DomainClass, TopicDomainClass,\
     Domain, Topic
@@ -8,6 +9,8 @@ from littlefish.dojo import TextField, SelectField, TreeField, TreeLevel,\
 from littlefish.utils import storify
 
 from flaskext.wtf import Form, validators
+import weasy
+from StringIO import StringIO
 
 
 @app.route('/sequence/xhr/Class/')
@@ -101,3 +104,18 @@ def add_sequence():
         return redirect(url_for('sequence', sequence_id=seq.id), code=303)
     return render_template('wtforms/form.jinja2', form=form,
             title=u'Ajouter une séquence')
+
+@app.route('/sequence/<int:sequence_id>/pdf')
+def sequence_pdf(sequence_id):
+    seq = Sequence.query.get_or_404(sequence_id)
+    html = render_template('print/sequence.jinja2', sequence=seq)
+    open('/home/ro/test.html', 'w').write(html.encode('utf8'))
+    pdf = weasy.PDFDocument.from_string(html)
+    io = StringIO()
+    pdf.write_to(io)
+    io.seek(0)
+    response = make_response(str(io.read()))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = \
+            "attachemnt; filename=%s.pdf" % seq.title
+    return response

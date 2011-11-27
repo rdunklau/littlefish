@@ -19,7 +19,8 @@ options = dict(
     license="BSD",
     platforms="Any",
     packages=find_packages(),
-    install_requires=["flask>=0.8", 'flask-sqlalchemy', 'Flask-WTF', 'psycopg2'],
+    install_requires=["flask>=0.8", 'flask-sqlalchemy', 'Flask-WTF', 'psycopg2',
+        'WeasyPrint'],
     classifiers=[
         "Development Status :: WIP",
         "Intended Audience :: Public",

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}" />
   <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
   <link rel="stylesheet" href="http://yandex.st/dojo/1.6.1/dijit/themes/nihilo/nihilo.css" />
+  <meta charset="UTF-8">
 </head>
 <body class="nihilo">
   <header>
@@ -21,13 +22,13 @@
   </ul>
   {% if session.classe %}
   <form action="{{url_for('change_class')}}" method="post">
-	<label for="class">Classe</label>
-	<select name="classe" value="{{session.classe}}">
+	<label for="classe">Classe</label>
+	<select name="classe" id="classe">
 	  {% for classe in g.classes %}
 	  <option value="{{classe.code}}" {{'selected="selected"' if classe.code == session.classe}}>{{classe.code}}</option>
 	  {% endfor %}
 	</select>
-	<input type="submit" value="Changer!"></input>
+	<input type="submit" value="Changer!"/>
   </form>
   {% endif %}
   </header>

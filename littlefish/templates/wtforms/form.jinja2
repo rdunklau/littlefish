@@ -18,7 +18,7 @@
 {% endmacro %}
 
 {% macro wtform(form, url="", submittxt="Valider") %}
-  <form method="POST" action="{{ url }}" enctype="multipart/form-data" data-form="true">
+  <form method="POST" {{'action="%s"' % url if url}} enctype="multipart/form-data" data-form="true">
     {{ inner_wtform(form) | safe }}
     <input type="submit" id="{{submittxt}}" name="{{submittxt}}" value="{{submittxt}}"/>
   </form>

@@ -1,7 +1,1 @@
-<input {{ attrs | xmlattr }}>
-  {% for name, code in events %}
-	<script type="dojo/connect" data-event="{{name}}">
-	  {{ code | safe }}
-	</script>
-  {% endfor %}
-</input>
+<input {{ attrs | xmlattr }}/>

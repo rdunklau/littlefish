@@ -25,7 +25,7 @@ class DojoInput(wtfwidgets.Input):
         attrs.update(kwargs.pop('options', {}))
         for validator in field.validators:
             if isinstance(validator, validators.Required):
-                attrs['required'] = 'true'
+                attrs['required'] = 'required'
         return wtfwidgets.HTMLString(render_template(self.__template__,
             attrs=attrs, **kwargs))
 
