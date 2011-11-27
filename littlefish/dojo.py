@@ -45,10 +45,10 @@ class Select(wtfwidgets.TextInput, DojoInput):
         return super(Select, self).__call__(field, choices=field.choices,
                 **kwargs)
 
+
 class SelectField(wtffields.SelectField):
 
     widget = Select()
-
 
 
 class TreeLevel(object):
@@ -56,7 +56,7 @@ class TreeLevel(object):
     def __init__(self, label='', url=''):
         self.label = label
         self.url = url
-        
+
 
 class TreeSelect(wtfwidgets.TextInput, DojoInput):
 
@@ -76,7 +76,6 @@ class TreeSelect(wtfwidgets.TextInput, DojoInput):
                 attrs=attrs)
         return html_string
 
-    
     def __call__(self, field, **kwargs):
         html_string = ''
         for idx, level in enumerate(field.levels[:-1]):
@@ -95,7 +94,7 @@ class TreeSelect(wtfwidgets.TextInput, DojoInput):
                 value=field.levels_values[-1])
         return wtfwidgets.HTMLString(html_string)
 
-        
+
 class TreeField(wtffields.TextField):
 
     widget = TreeSelect()
@@ -113,7 +112,6 @@ class TreeField(wtffields.TextField):
                 self.levels_values.append(request.form.get('%s-level%i' % (
                     self.name, idx)))
             self.levels_values.append(self.data)
-
 
 
 class ListInput(wtfwidgets.TextInput):

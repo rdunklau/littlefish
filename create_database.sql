@@ -209,18 +209,21 @@ create table sequence (
 
 create table seance (
     id serial primary key,
-    sequence integer references sequence(id),
+    sequence_id integer references sequence(id),
     title character varying
 );
 
 
 create table etape (
     ordinal integer,
-    seance integer references seance(id),
+    seance_id integer references seance(id),
     time interval,
-    description character varying,
-    succeed_criteria character varying,
-    pe_role character varying,
-    primary key (ordinal, seance)
+	objectif text,
+	dispositif character varying[],
+	deroulement character varying[],
+	materiel character varying[],
+	consignes_criters character varying,
+    pe_role character varying[],
+    primary key (ordinal, seance_id)
 );
 

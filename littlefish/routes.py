@@ -1,12 +1,16 @@
 from flask import render_template, session, request, redirect, url_for
 from littlefish import app, db
-
+from littlefish.db import Sequence, TopicDomainClass
 # Load routes
-from littlefish import sequence, xhr
+from littlefish import sequence, xhr, seance, etape
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    sequences = Sequence.query.filter(TopicDomainClass.class_code ==
+            session['classe']).all()
+    return render_template('index.html', sequences=sequences)
+
 
 @app.route('/change_class/', methods=('POST',))
 def change_class():

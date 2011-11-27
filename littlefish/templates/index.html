@@ -3,7 +3,19 @@
 {% block title %} Accueil {% endblock title %}
 
 {% block content %}
-	<ul>
-		<li><a href="/sequence/">Séquences</a></li>
-	</ul>
+<ul>
+	<a href="/sequence/add/">Ajouter une séquence</a>
+	{% for seq in sequences %}
+	<li>
+	<a href="/sequence/{{seq.id}}">Séquence {{seq.title}}</a>
+	<dl>
+	  <dt>Nb de séances</dt><dd>{{seq.seances | count }}</dd>
+	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
+	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
+	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
+	</dl>
+	
+	</li>
+	{% endfor %}
+  </ul>
 {% endblock content %}

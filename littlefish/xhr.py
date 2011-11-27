@@ -8,4 +8,4 @@ from sqlalchemy.sql import and_, func
 @app.route('/xhr/suggest/<string:attribute>')
 def suggest(attribute):
     return storify(db.session.query(func.unnest(getattr(Sequence,
-        func.unnest(attr).label('id')).distinct().all(), 'label', 'label')
+        func.unnest(attr).label('label')).distinct().all(), 'label', 'label')))

@@ -15,6 +15,7 @@ app.config.from_object('littlefish.config.LittlefishConfig')
 from littlefish import db
 from littlefish import routes
 
+
 @app.before_request
 def inject_classes():
     if 'classe' not in session and\
