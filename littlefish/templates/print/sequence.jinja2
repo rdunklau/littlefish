@@ -1,0 +1,41 @@
+{% macro gen_ligne(title, attr, sequence) %}
+  <tr>
+	<td>{{title}}</td>
+	<td>
+	  <ul>
+		{% for value in sequence[attr] or [] %}
+		  <li>{{value}}</li>
+		{% endfor %}
+	  </ul>
+	 </td>
+  </tr>
+{% endmacro %}
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>{{sequence.title}}</title>
+  	<link rel="stylesheet" href="littlefish/static/css/print.css"/>
+</head>
+<body>
+<h1>Séquence : {{sequence.title}}</h1>
+  <article>
+	<dl>
+	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
+	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
+	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
+	</dl>
+	<table class="sequence_table">
+		{{ gen_ligne('Programmes', 'programmes', sequence) }}
+		{{ gen_ligne('Socle Commun', 'socles', sequence) }}
+		{{ gen_ligne('Pré-requis', 'prerequis', sequence) }}
+		{{ gen_ligne('Compétenes visées', 'competences', sequence) }}
+		{{ gen_ligne('Objectifs', 'objectifs', sequence) }}
+		{{ gen_ligne("Tâches de l'élève", 'taches', sequence) }}
+		{{ gen_ligne("Rôles de l'enseignant", 'roles', sequence) }}
+		{{ gen_ligne("Matériel PE", 'materiel_pe', sequence) }}
+		{{ gen_ligne("Matériel élève", 'materiel_eleve', sequence) }}
+	</table>
+  </article>
+</body>
+</htmL>
