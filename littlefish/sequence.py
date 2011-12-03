@@ -54,7 +54,7 @@ class SequenceForm(Form):
         TreeLevel('Discipline', '/sequence/xhr/Topic')])
     programmes = ListField('Programmes',
             url='/xhr/suggest/Sequence/programmes')
-    socles = ListField('Socles communs',
+    socles = ListField('Socle commun',
             url='/xhr/suggest/Sequence/socles')
     prerequis = ListField(u'Prérequis',
             url='/xhr/suggest/Sequence/prerequis')
