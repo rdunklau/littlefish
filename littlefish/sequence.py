@@ -64,7 +64,7 @@ class SequenceForm(Form):
             url='/xhr/suggest/Sequence/objectifs')
     taches = ListField(u'Tâches',
             url='/xhr/suggest/Sequence/taches')
-    roles = ListField(u'Rôles',
+    roles = ListField(u'Rôles du PE',
             url='/xhr/suggest/Sequence/roles')
     materiel_pe = ListField(u'Matériel PE',
             url='/xhr/suggest/Sequence/materiel_pe')
