@@ -9,10 +9,12 @@
 {% endmacro %}
 
 {% macro gen_ligne(title, attr, sequence) %}
+  {% if sequence[attr] %}
   <tr>
 	<td>{{ title }}</td>
 	{{ gen_list_cell(attr, sequence) }}
   </tr>
+  {% endif %}
 {% endmacro %}
 <!doctype html>
 <html>
