@@ -41,8 +41,8 @@ make_select = (elem) ->
 
 make_form = (elem) ->
 	args =
-		method: dojo.attr(elem, 'method')
-		action: dojo.attr(elem, 'action')
+		method: dojo.attr(elem, 'method') || ''
+		action: dojo.attr(elem, 'action') || ''
 		enctype: dojo.attr(elem, 'enctype')
 	form = new dijit.form.Form(args, elem)
 	form.onSubmit = (evt) ->
