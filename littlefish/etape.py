@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Views for managing an etape"""
+
 from flask import render_template, redirect, url_for, request, session, g
 from littlefish import app
 from littlefish.db import db, Class, Seance, DomainClass, TopicDomainClass,\
@@ -11,6 +13,7 @@ from sqlalchemy.sql import func
 
 
 class EtapeForm(Form):
+    """The form  defining an etape"""
     title = TextField(u'Titre', [validators.Required()])
     time = TimeField(u'Durée')
     objectif = TextField(u'Objectif', [validators.Required()])
@@ -27,12 +30,14 @@ class EtapeForm(Form):
 
 @app.route('/etape/<int:seance_id>/<int:ordinal>')
 def etape(seance_id, ordinal):
+    """View presenting an etape itself"""
     return render_template('etape.html')
 
 
 @app.route('/etape/<int:seance_id>/<int:ordinal>/edit',
         methods=('GET', 'POST'))
 def edit_etape(seance_id, ordinal):
+    """Edit etape view"""
     etape = Etape.query.filter_by(seance_id=seance_id, ordinal=ordinal).one()
     seq = etape.seance.sequence
     g.breadcrumb = [(seq.title, url_for('sequence',
@@ -50,6 +55,7 @@ def edit_etape(seance_id, ordinal):
 
 @app.route('/etape/add/<int:seance_id>', methods=('GET', 'POST'))
 def add_etape(seance_id):
+    """Add etape view"""
     form = EtapeForm()
     seance = Seance.query.get_or_404(seance_id)
     g.breadcrumb = [(seance.sequence.title, url_for('sequence',

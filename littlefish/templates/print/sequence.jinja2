@@ -1,30 +1,37 @@
-{% macro gen_ligne(title, attr, sequence) %}
-  <tr>
-	<td>{{title}}</td>
+{% macro gen_list_cell(attr, item) %}
 	<td>
 	  <ul>
-		{% for value in sequence[attr] or [] %}
+		{% for value in item[attr] or [] %}
 		  <li>{{value}}</li>
 		{% endfor %}
 	  </ul>
 	 </td>
+{% endmacro %}
+
+{% macro gen_ligne(title, attr, sequence) %}
+  <tr>
+	<td>{{ title }}</td>
+	{{ gen_list_cell(attr, sequence) }}
   </tr>
 {% endmacro %}
 <!doctype html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>{{sequence.title}}</title>
+	<title>{{ sequence.title}}</title>
   	<link rel="stylesheet" href="littlefish/static/css/print.css"/>
 </head>
 <body>
-<h1>Séquence : {{sequence.title}}</h1>
+<section>
+<h1>Fiche de préparation</h1>
   <article>
-	<dl>
-	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
-	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
-	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
-	</dl>
+	<table class="def_table">
+	  <tr><td>Niveau</td><td>{{ sequence.topic_assoc.grade.label}}</td></tr>
+	  <tr><td>Domaine disciplinaire</td><td>{{ sequence.topic_assoc.domain.label}}</td></tr>
+	  <tr><td>Discipline</td><td>{{ sequence.topic_assoc.topic.label}}</td></tr>
+	  <tr><td>Nombre de séances</td><td>{{ sequence.seances | count}}</td></tr>
+	</table>
+	<h2>Titre de la séquence: {{ sequence.title }}</h2>
 	<table class="sequence_table">
 		{{ gen_ligne('Programmes', 'programmes', sequence) }}
 		{{ gen_ligne('Socle Commun', 'socles', sequence) }}
@@ -37,5 +44,39 @@
 		{{ gen_ligne("Matériel élève", 'materiel_eleve', sequence) }}
 	</table>
   </article>
+</section>
+{% for seance in sequence.seances %}
+<section class="landscape">
+<h1>Séance {{ loop.counter }}: {{seance.title}}
+<table class="seance_table">
+  <tr>
+  <th>Étapes (temps)</th>
+  <th>Objectif</th>
+  <th>Dispositif</th>
+  <th>Déroulement</th>
+  <th>Matériel</th>
+  <th>Consignes / Critère de réussite</th>
+  <th>Rôle PE</th>
+  </tr>
+{% for etape in seance.etapes %}
+<tr>
+		<td>{{etape.title}} {{etape.time}}</td>
+		<td>{{etape.objectif}}</td>
+		{{ gen_list_cell('dispositif', etape) }}
+		{{ gen_list_cell('deroulement', etape) }}
+		<td>
+		  <ul>
+			{% for materiel in (etape.materiel_pe + etape.materiel_eleve) or []%}
+			<li>{{materiel}}</li>
+			{% endfor %}
+		  </ul>
+		</td>
+		<td>{{ etape.consignes_criteres }}</td>
+		{{ gen_list_cell('pe_role', etape) }}
+</tr>
+{% endfor %}
+</table>
+</section>
+{% endfor %}
 </body>
-</htmL>
+</html>

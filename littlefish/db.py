@@ -1,3 +1,4 @@
+"""SQLAlchemy entities definition"""
 from flaskext.sqlalchemy import SQLAlchemy
 
 from sqlalchemy.orm import relationship, backref
@@ -11,54 +12,61 @@ db.metadata.reflect(bind=db.get_engine(app))
 
 
 def table(tablename):
+    """Helper to get a table by name"""
     return db.metadata.tables[tablename]
 
 
-class Seance(db.Model):
-    __table__ = table('seance')
-    sequence = relationship('Sequence', backref=backref('seances',
-        lazy='joined'),
-            lazy='joined')
-
-
 class Sequence(db.Model):
+    """Central entity in the application.
+    Is linked to a topic, a domain and a class via the topic_domain_class
+    table.
+    """
     __table__ = table('sequence')
     topic_assoc = relationship('TopicDomainClass', backref=backref('sequences',
         lazy='joined'),
             lazy='joined')
 
 
+class Seance(db.Model):
+    """A Seance is the second level of organization, below Sequence"""
+    __table__ = table('seance')
+    sequence = relationship('Sequence', backref=backref('seances',
+        lazy='joined'),
+            lazy='joined')
+
+
+
 class Etape(db.Model):
+    """An Etape is the third level of organization"""
     __table__ = table('etape')
     seance = relationship('Seance', backref=backref('etapes', lazy='joined'),
             lazy='joined')
 
-    @property
-    def rowspan(self):
-        return max(len(self.materiel_pe) + len(materiel_eleve),
-                   len(self.dispositif),
-                   len(self.deroulement))
-
 
 class Class(db.Model):
+    """A class (eg, CM1, CM2..)"""
     __table__ = table('class')
 
 
 class Domain(db.Model):
+    """A study domain (french, mathematics...)"""
     __table__ = table('domain')
 
 
 class DomainClass(db.Model):
+    """Association between domains and classes"""
     __table__ = table('domain_class')
     domain = relationship(Domain, lazy='joined')
     grade = relationship(Class, lazy='joined')
 
 
 class Topic(db.Model):
+    """A specific topic."""
     __table__ = table('topic')
 
 
 class TopicDomainClass(db.Model):
+    """Associates a topic to a domain and class"""
     __table__ = table('topic_domain_class')
     domain_class = relationship(DomainClass,
         lazy='joined',

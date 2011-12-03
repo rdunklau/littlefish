@@ -107,10 +107,10 @@ ul[data-islist] li {
 
 
 .pdfIcon{
-  width: 32px;
+  width: 16px;
   cursor: pointer;
-  height: 32px;
-  line-height: 48px;
+  height: 16px;
+  line-height: 32px;
   background-image: url('/static/img/pdf.png');
   background-repeat: no-repeat;
   font-size: 0em;
@@ -183,6 +183,10 @@ table.seance_table tr td:first-child {
 
 table.seance_table tr td:nth-child(2) {
   border-left: none;
+}
+
+table.seance_table tr.empty td:first-child {
+  border: solid 1px black;
 }
 
 

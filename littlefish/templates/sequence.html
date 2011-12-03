@@ -1,5 +1,8 @@
 {% extends '_layout.jinja2' %}
-{% block title %} Séquence : {{sequence.title}} <a class="editIcon" title="Modifier" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Modifier</a>{% endblock title %}
+{% block title %} Séquence : {{sequence.title}} 
+<a class="editIcon" title="Modifier" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Modifier</a>
+<a class="pdfIcon" title="Imprimer" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Imprimer</a>
+{% endblock title %}
 
 {% macro gen_ligne(title, attr, sequence) %}
   <tr>

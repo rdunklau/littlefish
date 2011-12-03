@@ -1,5 +1,97 @@
-table, td, tr, tbody, thead{
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+td, th{
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+  margin: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+table, td, tr, th {
+  border-spacing: 0px;
+}
+
+table tr td:first-child,
+table tr th:first-child {
+  border-left: 0.5px solid black;
+}
+
+table tr:first-child td,
+table tr:first-child th {
+  border-top: 0.5px solid black;
+}
+
+
+h1 {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1em;
+}
+
+h2 {
+  text-align: center;
   border: 1px solid black;
-  border-top: 2px solid black;
-  border-collapse: collapse;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+section {
+  width: 19cm;
+  height: 27.7cm;
+  display: block;
+  margin-bottom: 1cm;
+}
+
+section.landscape {
+  width: 27.7cm;
+  height: 19cm;
+}
+
+html, body {
+  font-size: 0.8em;
+}
+
+table.sequence_table tr td:first-child {
+  font-weight: bold;
+  width: 15%;
+}
+
+table.def_table tr td, table.def_table tr th, table.def_table tr{
+  border: 0px;
+}
+
+table.def_table tr td:last-child {
+  font-weight: bold;
+  padding-left: 5px;
+}
+
+table.def_table {
+  width: 40%;
+}
+
+@page {
+  size: A4 landscape;
+}
+
+@page :first {
+  size: A4;
+}
+
+table.seance_table {
+  width: 100%;
+}
+
+table.seance_table td, th{
+  text-align: center;
+}
+
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }

@@ -1,57 +1,59 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, url_for, request, session, g
+"""Views managing a seance"""
+from flask import render_template, redirect, url_for, g
 from littlefish import app
-from littlefish.db import db, Class, Sequence, DomainClass, TopicDomainClass,\
-    Domain, Topic, Seance
-from littlefish.dojo import TextField, SelectField, TreeField, TreeLevel,\
-    ListField
-from littlefish.utils import storify
+from littlefish.db import db, Sequence, Seance
+from littlefish.dojo import TextField
 from flaskext.wtf import Form, validators
 from sqlalchemy.sql import func
 
 
 class SeanceForm(Form):
+    """A basic form for seance"""
     title = TextField(u'Titre', [validators.Required()])
 
 
 @app.route('/seance/<int:seance_id>')
 def seance(seance_id):
-    seance = Seance.query.get_or_404(seance_id)
-    g.breadcrumb = [(seance.sequence.title, url_for('sequence',
-        sequence_id=seance.sequence_id))]
-    return render_template('seance.html', seance=seance)
+    """A single seance view"""
+    seance_item = Seance.query.get_or_404(seance_id)
+    g.breadcrumb = [(seance_item.sequence.title, url_for('sequence',
+        sequence_id=seance_item.sequence_id))]
+    return render_template('seance.html', seance=seance_item)
 
 
 @app.route('/seance/<int:seance_id>/edit', methods=('GET', 'POST'))
 def edit_seance(seance_id):
-    seance = Seance.query.get_or_404(seance_id)
-    g.breadcrumb = [(seance.sequence.title, url_for('sequence',
-        sequence_id=seance.sequence_id)),
-        (seance.title, url_for('seance', seance_id=seance_id))]
-    form = SeanceForm(obj=seq)
+    """Edit seance view"""
+    seance_item = Seance.query.get_or_404(seance_id)
+    g.breadcrumb = [(seance_item.sequence.title, url_for('sequence',
+        sequence_id=seance_item.sequence_id)),
+        (seance_item.title, url_for('seance', seance_id=seance_id))]
+    form = SeanceForm(obj=seance_item)
     if form.validate_on_submit():
-        form.populate_obj(seance)
-        db.session.add(seq)
+        form.populate_obj(seance_item)
+        db.session.add(seance_item)
         db.session.commit()
-        return redirect(url_for('seance', seance_id=seq.id), code=303)
+        return redirect(url_for('seance', seance_id=seance_id), code=303)
     return render_template('wtforms/form.jinja2', form=form,
-        title=u'Editer la séance %s' % seq.title)
+        title=u'Editer la séance %s' % seance_item.title)
 
 
 @app.route('/seance/add/<int:sequence_id>', methods=('GET', 'POST'))
 def add_seance(sequence_id):
+    """Add seance view"""
     form = SeanceForm()
     seq = Sequence.query.get_or_404(sequence_id)
     g.breadcrumb = [(seq.title, url_for('sequence',
         sequence_id=sequence_id))]
     if form.validate_on_submit():
-        seance = Seance()
-        seance.sequence_id = sequence_id
-        form.populate_obj(seance)
-        ordinal = (db.session.query(func.max(Seance.ordinal) +
+        seance_item = Seance()
+        seance_item.sequence_id = sequence_id
+        form.populate_obj(seance_item)
+        seance_item.ordinal = (db.session.query(func.max(Seance.ordinal) +
                 1).filter(Seance.sequence_id == sequence_id)
                 .scalar()) or 1
-        db.session.add(seance)
+        db.session.add(seance_item)
         db.session.commit()
         return redirect(url_for('sequence', sequence_id=sequence_id), code=303)
     return render_template('wtforms/form.jinja2', form=form,

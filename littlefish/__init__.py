@@ -1,3 +1,4 @@
+"""Base application definition"""
 from flask import Flask, g, session, redirect, url_for, request
 import psycopg2
 import psycopg2.extensions
@@ -22,9 +23,10 @@ from littlefish import routes
 
 @app.before_request
 def inject_classes():
+    """Middleware ensuring that a class is selected at all time"""
     if ('classe' not in session and
-            request.endpoint not in ('static', 'change_class', 'select_class')
-            and request.url != '/favicon.ico'):
+            request.endpoint not in ('static', 'change_class',
+                'select_class', None)):
         session['last_url'] = request.url
         return redirect(url_for('select_class'), 303)
     g.classes = db.Class.query.all()

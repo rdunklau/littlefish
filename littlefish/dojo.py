@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Dojo support for WTForms"""
 import json
 
 from flask import render_template, request
@@ -12,6 +13,7 @@ import datetime
 
 
 class DojoInput(wtfwidgets.Input):
+    """Base class for dojo-based inputs"""
 
     __template__ = 'wtforms/input.jinja2'
 
@@ -31,16 +33,19 @@ class DojoInput(wtfwidgets.Input):
 
 
 class TextInput(wtfwidgets.TextInput, DojoInput):
+    """A simple text input"""
 
     dojo_type = 'dijit.form.ValidationTextBox'
 
 
 class TextField(wtffields.TextField):
+    """Field associated with textinput"""
 
     widget = TextInput()
 
 
 class Select(wtfwidgets.TextInput, DojoInput):
+    """A select with autocompletion"""
 
     dojo_type = 'dijit.form.FilteringSelect'
     __template__ = 'wtforms/select.jinja2'
@@ -51,11 +56,13 @@ class Select(wtfwidgets.TextInput, DojoInput):
 
 
 class SelectField(wtffields.SelectField):
+    """Field associated with Select"""
 
     widget = Select()
 
 
 class TreeLevel(object):
+    """A level in a tree select"""
 
     def __init__(self, label='', url=''):
         self.label = label
@@ -63,8 +70,10 @@ class TreeLevel(object):
 
 
 class TreeSelect(wtfwidgets.TextInput, DojoInput):
+    """A widget allowign to nest dependent selects, filtering their inputs"""
 
     def render(self, level, id, name, parent=None, value=None):
+        """Utility method for endering a level"""
         attrs = {}
         attrs['id'] = id
         attrs['name'] = name
@@ -100,6 +109,7 @@ class TreeSelect(wtfwidgets.TextInput, DojoInput):
 
 
 class TreeField(wtffields.TextField):
+    """Field associated with the TreeSelect"""
 
     widget = TreeSelect()
 
@@ -119,6 +129,7 @@ class TreeField(wtffields.TextField):
 
 
 class ListInput(wtfwidgets.TextInput):
+    """A dynamically sized list of suggest box inputs"""
 
     def __call__(self, field, **kwargs):
         attrs = {}
@@ -130,6 +141,7 @@ class ListInput(wtfwidgets.TextInput):
 
 
 class ListField(wtffields.TextField):
+    """The field associated to the ListInput"""
 
     widget = ListInput()
 
@@ -145,6 +157,7 @@ class ListField(wtffields.TextField):
 
 
 class TimeInput(wtfwidgets.TextInput, DojoInput):
+    """A time selector widget"""
 
     dojo_type = 'dijit.form.ValidationTextBox'
 
@@ -165,6 +178,7 @@ class TimeInput(wtfwidgets.TextInput, DojoInput):
 
 
 class TimeField(wtffields.TextField):
+    """The field associated with the TimeInput"""
 
     widget = TimeInput()
 

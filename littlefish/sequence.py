@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, url_for, request, session, g
+"""Sequence views"""
+from flask import render_template, redirect, url_for, session, g
 from flask.helpers import make_response
 from littlefish import app
-from littlefish.db import db, Class, Sequence, DomainClass, TopicDomainClass,\
-    Domain, Topic
-from littlefish.dojo import TextField, SelectField, TreeField, TreeLevel,\
-    ListField
+from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
+    Domain, Topic)
+from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
 from littlefish.utils import storify
 
 from flaskext.wtf import Form, validators
@@ -15,11 +15,13 @@ from StringIO import StringIO
 
 @app.route('/sequence/xhr/Class/')
 def classes_select():
+    """JSON view of all the classes"""
     return storify(db.session.query(Class.code.label('id'), Class.label).all())
 
 
 @app.route('/sequence/xhr/Domain')
 def domain_select():
+    """JSON view of the domains for current class"""
     return storify(db.session.query(DomainClass.id,
             Domain.label,
             Class.code.label('parent'))
@@ -32,6 +34,7 @@ def domain_select():
 
 @app.route('/sequence/xhr/Topic')
 def topic_select():
+    """JSON view for all topic attached to the current class"""
     return storify(db.session.query(TopicDomainClass.id,
             Topic.label,
             DomainClass.id.label('parent'))
@@ -44,6 +47,7 @@ def topic_select():
 
 
 class SequenceForm(Form):
+    """Form for managing sequences"""
     title = TextField(u'Titre', [validators.Required()])
     topic_domain_class = TreeField(u'Niveau/Discipline', levels=[
         TreeLevel('Domaine Disciplinaire', '/sequence/xhr/Domain'),
@@ -70,18 +74,19 @@ class SequenceForm(Form):
 
 @app.route('/sequence/<int:sequence_id>')
 def sequence(sequence_id):
+    """Single sequence view"""
     seq = Sequence.query.get_or_404(sequence_id)
     return render_template('sequence.html', sequence=seq)
 
 
 @app.route('/sequence/<int:sequence_id>/edit', methods=('GET', 'POST'))
 def edit_sequence(sequence_id):
+    """Edit sequence view"""
     seq = Sequence.query.get_or_404(sequence_id)
     g.breadcrumb = [(seq.title, url_for('sequence', sequence_id=sequence_id))]
     form = SequenceForm(obj=seq)
     if form.validate_on_submit():
         form.populate_obj(seq)
-        prog = request.values.getlist('programmes')
         db.session.add(seq)
         db.session.commit()
         return redirect(url_for('sequence', sequence_id=seq.id), code=303)
@@ -94,28 +99,38 @@ def edit_sequence(sequence_id):
 
 @app.route('/sequence/add/', methods=('GET', 'POST'))
 def add_sequence():
+    """Add sequence view"""
     form = SequenceForm()
     if form.validate_on_submit():
         seq = Sequence()
         form.populate_obj(seq)
-        prog = request.values.getlist('programmes')
         db.session.add(seq)
         db.session.commit()
         return redirect(url_for('sequence', sequence_id=seq.id), code=303)
     return render_template('wtforms/form.jinja2', form=form,
             title=u'Ajouter une séquence')
 
+
 @app.route('/sequence/<int:sequence_id>/pdf')
 def sequence_pdf(sequence_id):
+    """PDF view of a sequence and its seances, etapes..."""
     seq = Sequence.query.get_or_404(sequence_id)
     html = render_template('print/sequence.jinja2', sequence=seq)
     open('/home/ro/test.html', 'w').write(html.encode('utf8'))
     pdf = weasy.PDFDocument.from_string(html)
-    io = StringIO()
-    pdf.write_to(io)
-    io.seek(0)
-    response = make_response(str(io.read()))
+    pdf_out = StringIO()
+    pdf.write_to(pdf_out)
+    pdf_out.seek(0)
+    response = make_response(str(pdf_out.read()))
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
             "attachemnt; filename=%s.pdf" % seq.title
     return response
+
+
+@app.route('/sequence/<int:sequence_id>/pdfpreview')
+def sequence_pdf_preview(sequence_id):
+    """PDF view of a sequence and its seances, etapes..."""
+    seq = Sequence.query.get_or_404(sequence_id)
+    html = render_template('print/sequence.jinja2', sequence=seq)
+    return html
