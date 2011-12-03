@@ -101,22 +101,27 @@ ul[data-islist] li {
   background-repeat: no-repeat;
   font-size: 0em;
   margin: 0;
-  pediting: 0;
   display: inline-block;
 }
 
 
 .pdfIcon{
-  width: 16px;
   cursor: pointer;
+  width: 16px;
   height: 16px;
-  line-height: 32px;
+  line-height: 24px;
   background-image: url('/static/img/pdf.png');
   background-repeat: no-repeat;
   font-size: 0em;
   margin: 0;
-  ppdfing: 0;
   display: inline-block;
+}
+
+.pdfIcon.big {
+  background-image: url('/static/img/pdf_big.png');
+  width: 32px;
+  line-height: 48px;
+  height: 32px;
 }
 
 
