@@ -1,7 +1,7 @@
 """Base views"""
 from flask import render_template, session, request, redirect, url_for
 from littlefish import app, db
-from littlefish.db import Sequence, TopicDomainClass
+from littlefish.db import Sequence, TopicDomainClass, Topic, Domain
 # Load routes
 from littlefish import sequence, xhr, seance, etape
 
@@ -9,8 +9,14 @@ from littlefish import sequence, xhr, seance, etape
 @app.route('/')
 def index():
     """Index page"""
-    sequences = Sequence.query.filter(TopicDomainClass.class_code ==
-            session['classe']).all()
+    sequences = (Sequence.query
+                .select_from(Sequence)
+                .join(TopicDomainClass)
+                .join(Domain)
+                .join(Topic)
+                .filter(TopicDomainClass.class_code == session['classe'])
+                .order_by(Domain.label, Topic.label)
+                .all())
     return render_template('index.html', sequences=sequences)
 
 

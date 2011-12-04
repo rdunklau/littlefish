@@ -7,16 +7,20 @@ Séquences <a title="Ajouter une séquence" class="addIcon" href="{{url_for('add
 {% for domain_code, sequences in sequences  | groupby('topic_assoc.domain_code') %}
 	<section>
 	<h3>{{sequences[0].topic_assoc.domain.label}}</h3>
-	<ul>
+	{% for topic_code, sequences in sequences  | groupby('topic_assoc.topic_code') %}
+	  <section>
+	  <h4>{{sequences[0].topic_assoc.topic.label}}</h4>
+	  <ul>
 	  {% for sequence in sequences %}
-	<li>
-	  {% set count = sequence.seances | count %}
-	  <a href="/sequence/{{sequence.id}}">{{sequence.title}} ( {{count}} séance{{'s' if count > 1 }} ) </a>
-<a class="pdfIcon" title="Imprimer" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Imprimer</a>
-
-	</li>
+		<li>
+		{% set count = sequence.seances | count %}
+		<a href="/sequence/{{sequence.id}}">{{sequence.title}} ( {{count}} séance{{'s' if count > 1 }} ) </a>
+  <a class="pdfIcon" title="Imprimer" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Imprimer</a>
+		</li>
+	  {% endfor %}
+      </ul>
+	  </section>
 	{% endfor %}
-    </ul>
 	</section>
 {% endfor %}
 {% endblock content %}

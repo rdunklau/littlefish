@@ -136,6 +136,8 @@ class ListInput(wtfwidgets.TextInput):
         attrs['id'] = field.id
         attrs['name'] = field.name
         attrs['data-datastore-url'] = field.url
+        if field.base_filter:
+            attrs['data-basefilter'] = field.base_filter
         return wtfwidgets.HTMLString(render_template('wtforms/list.jinja2',
             attrs=attrs, values=field.data or [], **kwargs))
 
@@ -147,6 +149,7 @@ class ListField(wtffields.TextField):
 
     def __init__(self, *args, **kwargs):
         self.url = kwargs.pop('url')
+        self.base_filter = kwargs.pop('base_filter', False)
         super(ListField, self).__init__(*args, **kwargs)
 
     def process_formdata(self, valuelist):

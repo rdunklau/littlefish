@@ -24,8 +24,9 @@ class EtapeForm(Form):
             url='/xhr/suggest/Etape/materiel_pe')
     materiel_eleve = ListField(u'Matériel élève',
             url='/xhr/suggest/Etape/materiel_eleve')
-    consignes_criteres = TextField(u'Consignes / Critères')
-    pe_role = ListField(u'Rôle pe', url='/xhr/suggest/Etape/pe_role')
+    consignes_criteres = ListField(u'Consignes / Critères',
+            url='/xhr/suggest/Etape/consignes_criteres')
+    pe_role = ListField(u'Rôle PE', url='/xhr/suggest/Etape/pe_role')
 
 
 @app.route('/etape/<int:seance_id>/<int:ordinal>')

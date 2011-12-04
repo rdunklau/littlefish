@@ -25,7 +25,6 @@ make_select = (elem) ->
 	  if dojo.hasAttr(elem, 'data-parent')
 		  parent = dijit.byId(dojo.attr(elem, 'data-parent'))
 		  child = select
-		  console.log child
 		  dojo.connect parent, 'onChange', parent, (evt) ->
 			  dojo.attr(child, 'query',
 				  parent: this.value)
@@ -73,8 +72,22 @@ make_array_input = (section) ->
 	elem = dojo.query('li', section)[0]
 	input_template = '<li>' + dojo.attr(elem, 'innerHTML') + '</li>'
 	input = dojo.query('li input', section)[0]
+	base_url = dojo.attr(input, 'data-datastore-url')
+	full_url = base_url
+	if dojo.attr(input, 'data-basefilter')
+		filter = dojo.query('input[id=base_filter]')[0]
+		filter = dojo.attr(filter, 'value')
+		full_url = base_url + '?' + filter
+		base_select = dijit.byId(dojo.attr(input, 'data-basefilter'))
 	store = new dojo.data.ItemFileReadStore
-			url: dojo.attr(input, 'data-datastore-url')
+			url: full_url
+			clearOnClose: true
+	if base_select
+		make_change = (store, base_url) =>
+			return (newvalue) => 
+				store.url = base_url + '?' + filter.split('=')[0] + '=' + newvalue
+				store.close()
+		dojo.connect base_select, 'onChange', make_change(store, base_url)
 	decorate_input(li, store) for li in dojo.query('li', section)
 	add_input = (evt) ->
 		container = dojo.place(input_template, section, 'last')

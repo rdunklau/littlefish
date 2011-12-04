@@ -33,7 +33,8 @@ class Seance(db.Model):
     sequence = relationship('Sequence', backref=backref('seances',
         lazy='joined'),
             lazy='joined')
-
+    topic_assoc = relationship('TopicDomainClass',
+            secondary='sequence')
 
 
 class Etape(db.Model):
