@@ -14,6 +14,15 @@
 </head>
 <body class="nihilo">
   <header>
+  <ul class="sequence">
+  {% for category, msgs in get_flashed_messages(with_categories=true) | sort(0) | groupby(0) %}
+  <li class="message {{ category }}">
+  	{% for category, msg in msgs %}
+		{{ msg }}
+  	{% endfor %}
+  </li>
+  {% endfor %}
+  </ul>
   <ul class="breadcrumb">
 	<li><a href="/">Accueil</a></li>
   {% for link, url in g.breadcrumb %}

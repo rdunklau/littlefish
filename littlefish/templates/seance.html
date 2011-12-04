@@ -43,7 +43,13 @@
 			{% endfor %}
 		  </ul>
 		</td>
-		<td>{{etape.consignes_criteres}}</td>
+		<td>
+		  <ul>
+			{% for consignes_criteres in etape.consignes_criteres or []%}
+			<li>{{consignes_criteres}}</li>
+			{% endfor %}
+		  </ul>
+		</td>
 		<td>
 			<ul>
 			{% for role in etape.pe_role or []%}

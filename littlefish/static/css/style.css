@@ -52,6 +52,10 @@ form input, form .dijitTextBox, form .dijitSelect{
   display: block;
 }
 
+ul[data-islist] {
+  padding-left: 0px;
+}
+
 ul[data-islist] li input, ul[data-islist] li .dijitTextBox{
   display: inline-block;
 }
@@ -116,6 +120,19 @@ ul[data-islist] li {
   margin: 0;
   display: inline-block;
 }
+
+.copyIcon{
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 24px;
+  background-image: url('/static/img/copy.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  display: inline-block;
+}
+
 
 .pdfIcon.big {
   background-image: url('/static/img/pdf_big.png');
@@ -211,8 +228,15 @@ h3 {
   font-size: 1.6em;
 }
 
+h4 {
+  color: #0042A2;
+  font-size: 1.2em;
+}
+
+
 ul {
   list-style: disc;
+  padding-left: 30px;
 }
 
 .preslist ul {
@@ -225,6 +249,7 @@ table {
 
 table ul {
   list-style: dash;
+  padding-left: 0px;
 }
 
 header {
@@ -259,4 +284,8 @@ ul.breadcrumb li:before {
 
 ul.breadcrumb li:first-child:before {
   content: ''
+}
+
+section {
+	padding-left: 30px;
 }
