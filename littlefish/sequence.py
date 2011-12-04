@@ -4,9 +4,10 @@ from flask import render_template, redirect, url_for, session, g
 from flask.helpers import make_response
 from littlefish import app
 from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
-    Domain, Topic)
+    Domain, Topic, Etape, Seance)
 from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
 from littlefish.utils import storify, copy_entity
+from sqlalchemy import func
 
 from flaskext.wtf import Form, validators
 import weasy
@@ -121,12 +122,32 @@ def add_sequence():
 def sequence_pdf(sequence_id):
     """PDF view of a sequence and its seances, etapes..."""
     seq = Sequence.query.get_or_404(sequence_id)
-    html = render_template('print/sequence.jinja2', sequence=seq)
+    materiel_pe = (db.session.query(
+                    func.unnest(Etape.materiel_pe).label('materiel'))
+                    .select_from(Sequence)
+                    .join(Seance)
+                    .join(Etape)
+                    .filter(Sequence.id == seq.id)
+                    .distinct()
+                    .all())
+    materiel_eleve = (db.session.query(
+                    func.unnest(Etape.materiel_eleve).label('materiel'))
+                    .select_from(Sequence)
+                    .join(Seance)
+                    .join(Etape)
+                    .filter(Sequence.id == seq.id)
+                    .distinct()
+                    .all())
+    materiel_pe = set([m.materiel for m in materiel_pe] + seq.materiel_pe)
+    materiel_eleve = set([m.materiel for m in materiel_eleve] +
+                        seq.materiel_eleve)
+    html = render_template('print/sequence.jinja2', sequence=seq,
+            materiel_pe=materiel_pe,
+            materiel_eleve=materiel_eleve)
     pdf = weasy.PDFDocument.from_string(html)
     pdf_out = StringIO()
     pdf.write_to(pdf_out)
-    pdf_out.seek(0)
-    response = make_response(str(pdf_out.read()))
+    response = make_response(pdf_out.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
             "attachemnt; filename=%s.pdf" % seq.title

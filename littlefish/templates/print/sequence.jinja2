@@ -1,7 +1,7 @@
-{% macro gen_list_cell(attr, item) %}
+{% macro gen_list_cell(values) %}
 	<td>
 	  <ul>
-		{% for value in item[attr] or [] %}
+		{% for value in values or [] %}
 		  <li>{{value}}</li>
 		{% endfor %}
 	  </ul>
@@ -12,7 +12,7 @@
   {% if sequence[attr] %}
   <tr>
 	<td>{{ title }}</td>
-	{{ gen_list_cell(attr, sequence) }}
+	{{ gen_list_cell(sequence[attr]) }}
   </tr>
   {% endif %}
 {% endmacro %}
@@ -42,8 +42,8 @@
 		{{ gen_ligne('Objectifs', 'objectifs', sequence) }}
 		{{ gen_ligne("Tâches de l'élève", 'taches', sequence) }}
 		{{ gen_ligne("Rôles de l'enseignant", 'roles', sequence) }}
-		{{ gen_ligne("Matériel PE", 'materiel_pe', sequence) }}
-		{{ gen_ligne("Matériel élève", 'materiel_eleve', sequence) }}
+		<tr><td>Matériel PE</td>{{ gen_list_cell(materiel_pe) }}</tr>
+		<tr><td>Matériel élève</td>{{ gen_list_cell(materiel_eleve) }}</tr>
 	</table>
   </article>
 </section>
@@ -64,17 +64,11 @@
 <tr>
 		<td style="width: 10%;">{{etape.title}} {{etape.time}}</td>
 		<td style="width: 10%;">{{etape.objectif}}</td>
-		{{ gen_list_cell('dispositif', etape) }}
-		{{ gen_list_cell('deroulement', etape) }}
-		<td>
-		  <ul>
-			{% for materiel in (etape.materiel_pe + etape.materiel_eleve) or []%}
-			<li>{{materiel}}</li>
-			{% endfor %}
-		  </ul>
-		</td>
-		{{ gen_list_cell('consignes_criteres', etape) }}
-		{{ gen_list_cell('pe_role', etape) }}
+		{{ gen_list_cell(etape.dispositif) }}
+		{{ gen_list_cell(etape.deroulement) }}
+		{{ gen_list_cell(etape.materiel_pe + etape.materiel_eleve) }}
+		{{ gen_list_cell(etape.consignes_criteres) }}
+		{{ gen_list_cell(etape.pe_role) }}
 </tr>
 {% endfor %}
 </table>
