@@ -27,6 +27,6 @@ def inject_classes():
     g.classes = db.Class.query.all()
     if ('classe' not in session and
             request.endpoint not in ('static', 'change_class',
-                'select_class', 'index', None)):
+                'select_class', None)):
         session['last_url'] = request.url
         return redirect(url_for('select_class'), 303)
