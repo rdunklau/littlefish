@@ -1,5 +1,6 @@
 """Base views"""
-from flask import render_template, session, request, redirect, url_for
+from flask import (render_template, session, request, redirect, url_for,
+    send_from_directory)
 from littlefish import app, db
 from littlefish.db import Sequence, TopicDomainClass, Topic, Domain
 # Load routes
