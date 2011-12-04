@@ -6,7 +6,7 @@ from littlefish import app
 from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
     Domain, Topic)
 from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
-from littlefish.utils import storify
+from littlefish.utils import storify, copy_entity
 
 from flaskext.wtf import Form, validators
 import weasy
@@ -139,3 +139,22 @@ def sequence_pdf_preview(sequence_id):
     seq = Sequence.query.get_or_404(sequence_id)
     html = render_template('print/sequence.jinja2', sequence=seq)
     return html
+
+
+@app.route('/sequence/<int:sequence_id>/copy/')
+def copy_sequence(sequence_id):
+    """Copy a sequence, and all its related objects"""
+    seq = Sequence.query.get_or_404(sequence_id)
+    newseq = copy_entity(seq)
+    newseq.title = 'Copie de %s' % newseq.title
+    db.session.add(newseq)
+    for seance in seq.seances:
+        newseance = copy_entity(seance)
+        db.session.add(newseance)
+        for etape in seance.etapes:
+            newetape = copy_entity(etape)
+            db.session.add(newetape)
+            newseance.etapes.append(newetape)
+        newseq.seances.append(newseance)
+    db.session.commit()
+    return redirect('/', code=303)
