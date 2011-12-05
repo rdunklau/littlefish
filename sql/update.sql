@@ -1,4 +1,6 @@
-alter table etape add column new_consignes varchar[];
-update etape set new_consignes = ARRAY[consignes_criteres];
-alter table etape drop column consignes_criteres;
-alter table etape rename column new_consignes to consignes_criteres;
+alter table etape drop constraint  etape_ordinal_seance_id_key;
+alter table etape add unique (seance_id, ordinal) deferrable initially deferred;
+
+alter table seance drop constraint seance_sequence_id_ordinal_key;
+alter table seance add unique (sequence_id, ordinal) deferrable initially deferred;
+

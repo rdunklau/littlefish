@@ -308,8 +308,9 @@ create table seance (
     sequence_id integer references sequence(id),
 	ordinal integer,
     title character varying,
-	unique (sequence_id, ordinal)
 );
+-- Deferred to the end of a transaction to allow moving elements
+alter table seance add unique (sequence_id, ordinal) deferrable initially deferred;
 
 create table etape (
   	etape_id serial primary key not null,
@@ -322,8 +323,9 @@ create table etape (
 	deroulement character varying[],
 	materiel_pe character varying[],
 	materiel_eleve character varying[],
-	consignes_criteres character varying,
+	consignes_criteres character varying[],
     pe_role character varying[],
-    unique (ordinal, seance_id)
-);
+)
 
+-- Deferred to the end of a transaction to allow moving elements
+alter table etape add unique (seance_id, ordinal) deferrable initially deferred;

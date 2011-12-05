@@ -31,7 +31,7 @@ class Seance(db.Model):
     """A Seance is the second level of organization, below Sequence"""
     __table__ = table('seance')
     sequence = relationship('Sequence', backref=backref('seances',
-        lazy='joined'),
+        lazy='joined', order_by='Seance.ordinal'),
             lazy='joined')
     topic_assoc = relationship('TopicDomainClass',
             secondary='sequence')
@@ -40,7 +40,8 @@ class Seance(db.Model):
 class Etape(db.Model):
     """An Etape is the third level of organization"""
     __table__ = table('etape')
-    seance = relationship('Seance', backref=backref('etapes', lazy='joined'),
+    seance = relationship('Seance', backref=backref('etapes', lazy='joined',
+        order_by='Etape.ordinal'),
             lazy='joined')
 
 

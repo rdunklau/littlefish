@@ -96,9 +96,43 @@ ul[data-islist] li {
   display: inline-block;
 }
 
-.editIcon{
-  width: 32px;
+.upIcon{
+  width: 16px;
   cursor: pointer;
+  height: 16px;
+  line-height: 24px;
+  background-image: url('/static/img/up.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.upIcon.big{
+  background-image: url('/static/img/up_big.png');
+}
+
+.downIcon{
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 24px;
+  background-image: url('/static/img/down.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.downIcon.big{
+  background-image: url('/static/img/down_big.png');
+}
+
+
+.editIcon{
+  cursor: pointer;
+  width: 32px;
   height: 32px;
   line-height: 48px;
   background-image: url('/static/img/edit.png');
@@ -134,11 +168,15 @@ ul[data-islist] li {
 }
 
 
-.pdfIcon.big {
-  background-image: url('/static/img/pdf_big.png');
+.big {
   width: 32px;
   line-height: 48px;
   height: 32px;
+}
+
+
+.pdfIcon.big {
+  background-image: url('/static/img/pdf_big.png');
 }
 
 
@@ -186,6 +224,10 @@ table td, table th {
   padding: 6px;
 }
 
+ul.seance_list li:first-child .upIcon,
+ul.seance_list li:last-child .downIcon{
+  display: none;
+}
 
 table  li {
   margin-left: 25px;
@@ -199,13 +241,29 @@ table.seance_table th {
   font-weight: bold;
 }
 
+table.seance_table tr:last-child .downIcon,
+table.seance_table tr:first-child .upIcon {
+  display: none;
+}
+
+table.seance_table {
+  font-size: 0.8em;
+}
+
 table.seance_table tr td:first-child {
   border-right: none;
 }
 
+
 table.seance_table tr td:nth-child(2) {
   border-left: none;
+  border-right: none;
 }
+
+table.seance_table tr td:nth-child(3) {
+  border-left: none;
+}
+
 
 table.seance_table tr.empty td:first-child {
   border: solid 1px black;

@@ -7,7 +7,7 @@ from littlefish.db import db, Class, Seance, DomainClass, TopicDomainClass,\
     Domain, Topic, Etape
 from littlefish.dojo import TextField, SelectField, TreeField, TreeLevel,\
     ListField, TimeField
-from littlefish.utils import storify
+from littlefish.utils import storify, move
 from flaskext.wtf import Form, validators
 from sqlalchemy.sql import func
 
@@ -75,3 +75,11 @@ def add_etape(seance_id):
         return redirect(url_for('seance', seance_id=seance_id), code=303)
     return render_template('wtforms/form.jinja2', form=form,
             title=u'Ajouter une étape')
+
+
+@app.route('/etape/<int:etape_id>/move/<any(up, down):direction>')
+def move_etape(etape_id, direction):
+    etape = Etape.query.get_or_404(etape_id)
+    move(etape, direction, 'seance_id')
+    db.session.commit()
+    return redirect(url_for('seance', seance_id=etape.seance_id), code=303)

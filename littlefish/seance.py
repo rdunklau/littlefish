@@ -4,6 +4,7 @@ from flask import render_template, redirect, url_for, g
 from littlefish import app
 from littlefish.db import db, Sequence, Seance
 from littlefish.dojo import TextField
+from littlefish.utils import move
 from flaskext.wtf import Form, validators
 from sqlalchemy.sql import func
 
@@ -58,3 +59,12 @@ def add_seance(sequence_id):
         return redirect(url_for('sequence', sequence_id=sequence_id), code=303)
     return render_template('wtforms/form.jinja2', form=form,
             title=u'Ajouter une séance')
+
+
+@app.route('/seance/<int:seance_id>/move/<any(up, down):direction>')
+def move_seance(seance_id, direction):
+    seance = Seance.query.get_or_404(seance_id)
+    move(seance, direction, 'sequence_id')
+    db.session.commit()
+    return redirect(url_for('sequence', sequence_id=seance.sequence_id),
+            code=303)
