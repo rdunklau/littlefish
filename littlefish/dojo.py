@@ -44,6 +44,18 @@ class TextField(wtffields.TextField):
     widget = TextInput()
 
 
+class RichTextInput(TextInput, DojoInput):
+    """A simple text input"""
+
+    dojo_type = 'dijit.form.Textarea'
+
+
+class RichTextField(wtffields.TextField):
+    """Field associated with richtextinput"""
+
+    widget = RichTextInput()
+
+
 class Select(wtfwidgets.TextInput, DojoInput):
     """A select with autocompletion"""
 

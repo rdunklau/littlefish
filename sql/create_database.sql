@@ -308,6 +308,7 @@ create table seance (
     sequence_id integer references sequence(id),
 	ordinal integer,
     title character varying,
+    summary text
 );
 -- Deferred to the end of a transaction to allow moving elements
 alter table seance add unique (sequence_id, ordinal) deferrable initially deferred;

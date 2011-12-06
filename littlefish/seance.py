@@ -3,7 +3,7 @@
 from flask import render_template, redirect, url_for, g
 from littlefish import app
 from littlefish.db import db, Sequence, Seance
-from littlefish.dojo import TextField
+from littlefish.dojo import TextField, RichTextField
 from littlefish.utils import move
 from flaskext.wtf import Form, validators
 from sqlalchemy.sql import func
@@ -12,6 +12,7 @@ from sqlalchemy.sql import func
 class SeanceForm(Form):
     """A basic form for seance"""
     title = TextField(u'Titre', [validators.Required()])
+    summary = RichTextField(u'Résumé')
 
 
 @app.route('/seance/<int:seance_id>')
