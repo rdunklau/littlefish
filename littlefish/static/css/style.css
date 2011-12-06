@@ -345,5 +345,9 @@ ul.breadcrumb li:first-child:before {
 }
 
 section {
-	padding-left: 30px;
+  padding-left: 30px;
+}
+
+textarea, .dijitTextArea {
+  min-height: 6em;
 }

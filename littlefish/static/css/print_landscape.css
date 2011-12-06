@@ -1,0 +1,24 @@
+@import './print.css';
+
+@page {
+  size: A4 landscape;
+}
+
+table.seance_table {
+  width: 100%;
+  margin-top: 40px;
+}
+
+table.seance_table td, th{
+  font-size: 0.9em;
+}
+
+table.seance_table th {
+  vertical-align: middle;
+}
+
+table.seance_table td {
+  font-size: 0.6em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

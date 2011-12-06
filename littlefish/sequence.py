@@ -13,6 +13,8 @@ from flaskext.wtf import Form, validators
 import weasy
 from StringIO import StringIO
 
+from pyPdf import PdfFileReader, PdfFileWriter
+
 
 @app.route('/sequence/xhr/Class/')
 def classes_select():
@@ -145,12 +147,30 @@ def sequence_pdf(sequence_id):
             materiel_pe=materiel_pe,
             materiel_eleve=materiel_eleve)
     pdf = weasy.PDFDocument.from_string(html)
-    pdf_out = StringIO()
-    pdf.write_to(pdf_out)
-    response = make_response(pdf_out.getvalue())
+    seq_page = StringIO()
+    pdf.write_to(seq_page)
+    html = render_template('print/seances_summary.jinja2', sequence=seq)
+    pdf = weasy.PDFDocument.from_string(html)
+    seance_page = StringIO()
+    pdf.write_to(seance_page)
+    html = render_template('print/seances.jinja2', sequence=seq)
+    pdf = weasy.PDFDocument.from_string(html)
+    seances = StringIO()
+    pdf.write_to(seances)
+    out = PdfFileWriter()
+    input = PdfFileReader(seq_page)
+    out.addPage(input.getPage(0))
+    input = PdfFileReader(seance_page)
+    out.addPage(input.getPage(0))
+    input = PdfFileReader(seances)
+    for page in input.pages:
+        out.addPage(page)
+    outstream = StringIO()
+    out.write(outstream)
+    response = make_response(outstream.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-            "attachemnt; filename=%s.pdf" % seq.title
+            "attachemnt; filename=%s.pdf" % seq.title.encode('utf8')
     return response
 
 

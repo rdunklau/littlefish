@@ -7,8 +7,7 @@ td, th{
   border-right: 0.5px solid black;
   border-bottom: 0.5px solid black;
   margin: 0;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 5px 5px 5px 5px;
 }
 
 table, td, tr, th {
@@ -29,15 +28,18 @@ table tr:first-child th {
 h1 {
   font-weight: bold;
   text-align: center;
-  font-size: 1em;
+  font-size: 1.8em;
 }
 
 h2 {
   text-align: center;
   border: 1px solid black;
   width: 100%;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 5px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 section {
@@ -53,7 +55,7 @@ section.landscape {
 }
 
 html, body {
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 table.sequence_table tr td:first-child {
@@ -71,27 +73,15 @@ table.def_table tr td:last-child {
 }
 
 table.def_table {
-  width: 40%;
+  width: 60%;
 }
 
 @page {
-  size: A4 landscape;
-}
-
-@page :first {
   size: A4;
 }
 
-table.seance_table {
-  width: 100%;
-}
-
-table.seance_table td, th{
-  text-align: center;
-}
-
-table.seance_table td {
-  font-size: 0.8em;
+pre {
+  font-family: inherit;
 }
 
 ul, li {

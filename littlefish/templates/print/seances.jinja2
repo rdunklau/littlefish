@@ -1,0 +1,45 @@
+{% macro gen_list_cell(values) %}
+	<td>
+	  <ul>
+		{% for value in values or [] %}
+		  <li>{{value}}</li>
+		{% endfor %}
+	  </ul>
+	 </td>
+{% endmacro %}
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>{{ sequence.title}}</title>
+  	<link rel="stylesheet" href="littlefish/static/css/print_landscape.css"/>
+</head>
+<body>
+{% for seance in sequence.seances if seance.etapes | count %}
+<section class="landscape">
+<h1>Séance n°{{ loop.index }}: {{seance.title}}
+<table class="seance_table" style="width: 25cm;">
+  <tr>
+  <th style="width: 2cm;">Étapes (temps)</th>
+  <th style="width: 2cm;">Objectif</th>
+  <th style="width: 2cm;">Dispositif</th>
+  <th style="width: 9cm;">Déroulement</th>
+  <th style="width: 5cm;">Matériel</th>
+  <th style="width: 4cm;">Consignes / Critère de réussite</th>
+  <th style="width: 2cm;">Rôle PE</th>
+  </tr>
+{% for etape in seance.etapes %}
+<tr>
+		<td style="width: 10%;">{{etape.title}} {{etape.time}}</td>
+		<td style="width: 10%;">{{etape.objectif}}</td>
+		{{ gen_list_cell(etape.dispositif) }}
+		{{ gen_list_cell(etape.deroulement) }}
+		{{ gen_list_cell(etape.materiel_pe + etape.materiel_eleve) }}
+		{{ gen_list_cell(etape.consignes_criteres) }}
+		{{ gen_list_cell(etape.pe_role) }}
+</tr>
+{% endfor %}
+</table>
+</section>
+{% endfor %}
+</body>
+</html>
