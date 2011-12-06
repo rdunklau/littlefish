@@ -38,8 +38,8 @@
 	  </tbody>
 	</table>
   <section class="preslist">
-    <h2>Séances <a title="Ajouter une séance" class="addIcon" href="{{url_for('add_seance', sequence_id=sequence.id)}}">Ajouter</a></h2>
-	<ul class="seance_list">	
+    <h2 id="seances">Séances <a title="Ajouter une séance" class="addIcon" href="{{url_for('add_seance', sequence_id=sequence.id)}}">Ajouter</a></h2>
+	<ol class="seance_list">	
 	  {% for seance in sequence.seances %}
 	  <li>
 		  <a href="{{url_for('seance', seance_id=seance.id)}}">{{seance.title}} ({{seance.etapes | count }} étape{{'s' if seance.etapes|count > 1}})</a>
@@ -49,7 +49,7 @@
 	  {% else %}
 		<li>Aucune séance pour le moment</li>
 	  {% endfor %}
-	</ul>
+	</ol>
 	</section>
   </article>
 {% endblock %}

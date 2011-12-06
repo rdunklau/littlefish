@@ -1,33 +1,45 @@
-html, body {
-background-image: -webkit-gradient(
-    linear,
-    center bottom,
-    center top,
-    color-stop(0, rgb(63,68,153)),
-    color-stop(0.84, rgb(126,176,222))
-);
-background-image: -moz-linear-gradient(
-    center bottom,
-    rgb(63,68,153) 0%,
-    rgb(126,176,222) 84%
-);
+html {
+    height: 100%;
 }
 
 body {
-  padding-bottom: 40px;
-}
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 
-header {
+    background-image: -webkit-gradient(
+        linear,
+        center bottom,
+        center top,
+        color-stop(0, rgb(63,68,153)),
+        color-stop(0.84, rgb(126,176,222))
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        rgb(63,68,153) 0%,
+        rgb(126,176,222) 84%
+    );
+    background-color: rgb(63, 68, 153);
+    background-repeat: no-repeat;
 }
 
 section.content {
-    padding: 80px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 
+    overflow: visible;
     -moz-border-radius: 15px;
     border-radius: 15px;
     border: black;
-    margin-left: 90px;
-    margin-right: 90px;
-	margin-top: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+	margin-top: 30px;
+	margin-bottom: 30px;
+    background-repeat: repeat-x;
+    background-image: url('/static/img/bigfish.png');
     background-image: -webkit-gradient(
         linear,
         left top,
@@ -180,19 +192,20 @@ ul[data-islist] li {
 }
 
 
-
-
 header {
-  height: 40px;
+  background-color: black;
+  color: #00A6D6;
+  margin: 0;
 }
+
 
 header form input, header form label {
   display: inline-block;
-  font-size: 0.8em;
 }
 
 header form {
-  float: right;
+  display: inline-block;
+  padding-left: 100px;
 }
 
 
@@ -224,8 +237,8 @@ table td, table th {
   padding: 6px;
 }
 
-ul.seance_list li:first-child .upIcon,
-ul.seance_list li:last-child .downIcon{
+ol.seance_list li:first-child .upIcon,
+ol.seance_list li:last-child .downIcon{
   display: none;
 }
 
@@ -279,16 +292,18 @@ a, a:visited {
 h1, h2 {
   color: #0084B4;
   font-size: 2em;
+  margin-bottom: 1em;
+  margin-top: 1.2em;
 }
 
 h3 {
   color: #0084B4;
-  font-size: 1.6em;
+  font-size: 1.8em;
 }
 
 h4 {
   color: #0042A2;
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
 
@@ -297,7 +312,7 @@ ul {
   padding-left: 30px;
 }
 
-.preslist ul {
+.preslist ol {
   margin-left: 40px;
 }
 
@@ -310,18 +325,11 @@ table ul {
   padding-left: 0px;
 }
 
-header {
-  background-color: black;
-  color: #00A6D6;
-  padding-left: 30px;
-  padding-right: 30px;
-  font-size: 1.3em;
-}
 
 ul.breadcrumb {
   list-style: none;
-  display: inline;
-  float: left;
+  display: inline-block;
+  margin: 5px;
 }
 
 ul.breadcrumb a {

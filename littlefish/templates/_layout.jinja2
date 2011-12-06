@@ -27,7 +27,7 @@
   <ul class="breadcrumb">
 	<li><a href="/">Accueil</a></li>
   {% for link, url in g.breadcrumb %}
-	<li><a href="{{url}}">{{link}}</a></li>
+	<li><a href="{{url}}">{{link | truncate(20)}}</a></li>
   {% endfor %}
   </ul>
   {% if session.classe %}
