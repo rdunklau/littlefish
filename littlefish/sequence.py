@@ -161,7 +161,8 @@ def sequence_pdf(sequence_id):
     input = PdfFileReader(seq_page)
     out.addPage(input.getPage(0))
     input = PdfFileReader(seance_page)
-    out.addPage(input.getPage(0))
+    for page in input.pages:
+        out.addPage(page)
     input = PdfFileReader(seances)
     for page in input.pages:
         out.addPage(page)
@@ -170,7 +171,8 @@ def sequence_pdf(sequence_id):
     response = make_response(outstream.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-            "attachemnt; filename=%s.pdf" % seq.title.encode('utf8')
+            "attachemnt; filename=%s.pdf" % (seq.title.encode('utf8')
+            .replace('', '_'))
     return response
 
 
