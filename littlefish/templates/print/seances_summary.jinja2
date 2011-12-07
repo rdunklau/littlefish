@@ -5,7 +5,6 @@
   	<link rel="stylesheet" href="littlefish/static/css/print.css"/>
 </head>
 <body>
-<section>
 <h2>Résumé des séances</h2>
 {% for seance in sequence.seances %}
   <article>
@@ -13,5 +12,3 @@
     <p>{{(seance.summary | replace('\r', '<br/>')) or 'Résumé indisponible'}}</p>
   </article>
 {% endfor %}
-</section>
-
