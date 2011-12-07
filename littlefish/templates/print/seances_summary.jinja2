@@ -10,7 +10,7 @@
 {% for seance in sequence.seances %}
   <article>
     <h3>Séance n°{{ loop.index}}: {{seance.title}}</h3>
-    <pre>{{seance.summary or 'Résumé indisponible'}}</pre>
+    <p>{{(seance.summary | replace('\r', '<br/>')) or 'Résumé indisponible'}}</p>
   </article>
 {% endfor %}
 </section>
