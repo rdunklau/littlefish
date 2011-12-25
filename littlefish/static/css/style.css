@@ -91,8 +91,17 @@ ul[data-islist] li {
   display: inline-block;
 }
 
-.addButton {
-  clear: both;
+.addButton{
+  width: 16px;
+  cursor: pointer;
+  height: 16px;
+  line-height: 24px;
+  background-image: url('/static/img/add_small.png');
+  background-repeat: no-repeat;
+  font-size: 0em;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
 }
 
 .addIcon{
