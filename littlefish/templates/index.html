@@ -16,7 +16,7 @@ Séquences <a title="Ajouter une séquence" class="addIcon" href="{{url_for('add
 		{% set count = sequence.seances | count %}
 		<a href="/sequence/{{sequence.id}}">{{sequence.title}} ( {{count}} séance{{'s' if count > 1 }} ) </a>
 		<a class="pdfIcon" title="Imprimer" href="{{url_for('sequence_pdf', sequence_id=sequence.id)}}">Imprimer</a>
-		<a class="copyIcon" title="Imprimer" href="{{url_for('copy_sequence', sequence_id=sequence.id)}}">Copier</a>
+		<a class="copyIcon" title="Copier" href="{{url_for('copy_sequence', sequence_id=sequence.id)}}">Copier</a>
 
 		</li>
 	  {% endfor %}
