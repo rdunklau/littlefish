@@ -117,7 +117,7 @@ def add_sequence():
         return redirect(url_for('sequence', sequence_id=seq.id), code=303)
     return render_template('wtforms/form.jinja2', form=form,
             title=u'Ajouter une séquence',
-            base_filter='id=%s' % (seq.topic_assoc.id))
+            base_filter='')
 
 
 @app.route('/sequence/<int:sequence_id>/pdf')
