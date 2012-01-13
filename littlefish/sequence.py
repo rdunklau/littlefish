@@ -171,8 +171,8 @@ def sequence_pdf(sequence_id):
     response = make_response(outstream.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-            "attachemnt; filename=%s.pdf" % (seq.title.encode('utf8')
-            .replace('', '_'))
+            "attachment; filename=%s.pdf" % (seq.title.encode('utf8')
+            .replace(' ', '_'))
     return response
 
 
