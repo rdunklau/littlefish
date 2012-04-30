@@ -9,7 +9,7 @@ section {
 }
 
 table.seance_table {
-  width: 100%;
+  width: 25.7cm;
 }
 
 table.seance_table td, th{
@@ -19,6 +19,7 @@ table.seance_table td, th{
 table.seance_table th {
   vertical-align: middle;
   font-size: 0.9em;
+  text-align: center;
 }
 
 table.seance_table td {
