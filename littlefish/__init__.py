@@ -25,7 +25,6 @@ from littlefish import routes
 def inject_classes():
     """Middleware ensuring that a class is selected at all time"""
     g.classes = db.Class.query.all()
-    return
     if ('classe' not in session and
             request.endpoint not in ('static', 'change_class',
                 'select_class', None)):
