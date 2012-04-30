@@ -10,22 +10,18 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>{{ sequence.title}}</title>
-  	<link rel="stylesheet" href="littlefish/static/css/print_landscape.css"/>
+  	<link rel="stylesheet" href="./static/css/print_landscape.css"/>
 </head>
 <body>
-{% for seance in sequence.seances if seance.etapes | count %}
-<section class="landscape">
-<h1>Séance n°{{ loop.index }}: {{seance.title}}
 <table class="seance_table" style="width: 25cm;">
   <tr>
-  <th style="width: 2cm;">Étapes (temps)</th>
-  <th style="width: 2cm;">Objectif</th>
-  <th style="width: 2cm;">Dispositif</th>
-  <th style="width: 9cm;">Déroulement</th>
-  <th style="width: 5cm;">Matériel</th>
-  <th style="width: 4cm;">Consignes / Critère de réussite</th>
-  <th style="width: 2cm;">Rôle PE</th>
+  <th>Étapes (temps)</th>
+  <th>Objectif</th>
+  <th>Dispositif</th>
+  <th>Déroulement</th>
+  <th>Matériel</th>
+  <th>Consignes / Critère de réussite</th>
+  <th>Rôle PE</th>
   </tr>
 {% for etape in seance.etapes %}
 <tr>
@@ -40,6 +36,5 @@
 {% endfor %}
 </table>
 </section>
-{% endfor %}
 </body>
 </html>

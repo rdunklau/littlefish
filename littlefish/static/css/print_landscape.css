@@ -1,12 +1,15 @@
 @import './print.css';
 
 @page {
-  size: A4 landscape;
+  -weasy-size: A4 landscape;
+  margin: 2cm;
+}
+
+section {
 }
 
 table.seance_table {
   width: 100%;
-  margin-top: 40px;
 }
 
 table.seance_table td, th{
@@ -15,6 +18,7 @@ table.seance_table td, th{
 
 table.seance_table th {
   vertical-align: middle;
+  font-size: 0.9em;
 }
 
 table.seance_table td {

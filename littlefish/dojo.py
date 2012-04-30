@@ -140,7 +140,7 @@ class TreeField(wtffields.TextField):
             self.levels_values.append(self.data)
 
 
-class ListInput(wtfwidgets.TextInput):
+class ListInput(RichTextInput):
     """A dynamically sized list of suggest box inputs"""
 
     def __call__(self, field, **kwargs):

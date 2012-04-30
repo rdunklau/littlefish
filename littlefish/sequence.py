@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Sequence views"""
-from flask import render_template, redirect, url_for, session, g
+from flask import render_template, redirect, url_for, session, g, current_app
 from flask.helpers import make_response
 from littlefish import app
 from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
@@ -10,7 +10,7 @@ from littlefish.utils import storify, copy_entity
 from sqlalchemy import func
 
 from flaskext.wtf import Form, validators
-import weasy
+from weasyprint import HTML, CSS
 from StringIO import StringIO
 
 from pyPdf import PdfFileReader, PdfFileWriter
@@ -146,26 +146,34 @@ def sequence_pdf(sequence_id):
     html = render_template('print/sequence.jinja2', sequence=seq,
             materiel_pe=materiel_pe,
             materiel_eleve=materiel_eleve)
-    pdf = weasy.PDFDocument.from_string(html)
     seq_page = StringIO()
-    pdf.write_to(seq_page)
+    HTML(string=html,
+            base_url=current_app.static_folder).write_pdf(target=seq_page)
     html = render_template('print/seances_summary.jinja2', sequence=seq)
-    pdf = weasy.PDFDocument.from_string(html)
     seance_page = StringIO()
-    pdf.write_to(seance_page)
-    html = render_template('print/seances.jinja2', sequence=seq)
-    pdf = weasy.PDFDocument.from_string(html)
-    seances = StringIO()
-    pdf.write_to(seances)
+    HTML(string=html,
+            base_url=current_app.static_folder).write_pdf(target=seance_page)
+    seances_docs = []
+    for seance in seq.seances:
+        if seance.etapes:
+            seance_doc = StringIO()
+            seances_docs.append(seance_doc)
+            css = CSS(string=render_template('print/seances.css.jinja2',
+                title=seance.title, idx=seance.ordinal))
+            html = render_template('print/seances.jinja2', seance=seance)
+            doc_html = HTML(string=html, base_url=current_app.static_folder)
+            doc_html.write_pdf(target=seance_doc,
+                stylesheets=[css])
     out = PdfFileWriter()
     input = PdfFileReader(seq_page)
     out.addPage(input.getPage(0))
     input = PdfFileReader(seance_page)
     for page in input.pages:
         out.addPage(page)
-    input = PdfFileReader(seances)
-    for page in input.pages:
-        out.addPage(page)
+    for seance in seances_docs:
+        input = PdfFileReader(seance)
+        for page in input.pages:
+            out.addPage(page)
     outstream = StringIO()
     out.write(outstream)
     response = make_response(outstream.getvalue())

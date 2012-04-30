@@ -62,6 +62,7 @@ form label {
 form input, form .dijitTextBox, form .dijitSelect{
   clear: both;
   display: block;
+  width: 30em;
 }
 
 ul[data-islist] {
