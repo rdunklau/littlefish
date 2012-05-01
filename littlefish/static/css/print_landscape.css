@@ -12,18 +12,14 @@ table.seance_table {
   width: 25.7cm;
 }
 
-table.seance_table td, th{
-  font-size: 0.9em;
-}
-
-table.seance_table th {
+table.seance_table th, table.seance_table td{
   vertical-align: middle;
   font-size: 0.9em;
-  text-align: center;
+  text-align: justify;
 }
 
 table.seance_table td {
-  font-size: 0.6em;
+  font-size: 0.7em;
   padding-top: 10px;
   padding-bottom: 10px;
 }

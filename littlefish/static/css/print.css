@@ -66,10 +66,11 @@ table.def_table tr td, table.def_table tr th, table.def_table tr{
 table.def_table tr td:last-child {
   font-weight: bold;
   padding-left: 5px;
+
 }
 
-table.def_table {
-  width: 60%;
+table.def_table td:first-child{
+  width: 4cm;
 }
 
 @page {

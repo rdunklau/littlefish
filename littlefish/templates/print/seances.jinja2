@@ -25,7 +25,7 @@
   </tr>
 {% for etape in seance.etapes %}
 <tr>
-		<td style="width: 10%;">{{etape.title}} {{etape.time}}</td>
+		<td style="width: 10%;">{{etape.title}} <br/> {{etape.time}}</td>
 		<td style="width: 10%;">{{etape.objectif}}</td>
 		{{ gen_list_cell(etape.dispositif) }}
 		{{ gen_list_cell(etape.deroulement) }}
