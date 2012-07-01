@@ -1,5 +1,5 @@
 """SQLAlchemy entities definition"""
-from flaskext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 
 from sqlalchemy.orm import relationship, backref
 
