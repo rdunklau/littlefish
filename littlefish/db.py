@@ -26,7 +26,7 @@ class Sequence(db.Model):
         lazy='joined'),
             lazy='joined')
     user = relationship('User')
-    copy_of = relationship('Sequence')
+    copy_of = relationship('Sequence', uselist=False)
 
 
 class Seance(db.Model):
@@ -38,7 +38,7 @@ class Seance(db.Model):
     topic_assoc = relationship('TopicDomainClass',
             secondary='sequence')
     user = relationship('User')
-    copy_of = relationship('Seance')
+    copy_of = relationship('Seance', uselist=False)
 
 class Etape(db.Model):
     """An Etape is the third level of organization"""
@@ -47,7 +47,7 @@ class Etape(db.Model):
         order_by='Etape.ordinal'),
             lazy='joined')
     user = relationship('User')
-    copy_of = relationship('Etape')
+    copy_of = relationship('Etape', uselist=False)
 
 class Class(db.Model):
     """A class (eg, CM1, CM2..)"""

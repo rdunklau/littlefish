@@ -223,4 +223,5 @@ def copy_sequence(sequence_id):
             newseance.etapes.append(newetape)
         newseq.seances.append(newseance)
     db.session.commit()
-    return redirect('/', code=303)
+    return redirect(url_for('sequence', sequence_id=newseq.id),
+    		    code=303)
