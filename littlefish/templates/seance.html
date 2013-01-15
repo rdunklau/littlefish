@@ -6,7 +6,7 @@
 {% block content %}
 <article>
     <pre>{{seance.summary or 'Résumé non renseigné'}}</pre>
-    <h2>Étapes <a title="Ajouter une étape" class="addIcon" href="{{url_for('add_etape', seance_id=seance.id)}}">Ajouter</a></h2>
+    <h2>Étapes {% if session.user == seance.user_login %}<a title="Ajouter une étape" class="addIcon" href="{{url_for('add_etape', seance_id=seance.id)}}">Ajouter</a>{% endif %}</h2>
 	<table class="seance_table">
 	  <thead>
 		<tr>

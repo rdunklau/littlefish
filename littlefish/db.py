@@ -86,3 +86,8 @@ class TopicDomainClass(db.Model):
 class User(db.Model):
   """A user from the application."""
   __table__ = table('user')
+
+  @property
+  def fullname(self):
+    return "%s %s" % (self.firstname.capitalize(),
+                      self.lastname.capitalize())

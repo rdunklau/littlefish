@@ -1,6 +1,6 @@
 {% extends '_layout.jinja2' %}
 {% block title %} Séquence : {{sequence.title}}
-<small>( par <a href="{{url_for('user_sequences', user=sequence.user_login)}}">{{sequence.user_login}}</a> )</small>
+<small>( par <a href="{{url_for('user_sequences', user=sequence.user.fullname)}}">{{sequence.user_login}}</a> )</small>
 {% if sequence.user_login == session.user %}
 <a class="editIcon" title="Modifier" href="{{url_for('edit_sequence', sequence_id=sequence.id)}}">Modifier</a>
 {% endif %}
@@ -41,7 +41,7 @@
 	  </tbody>
 	</table>
   <section class="preslist">
-    <h2 id="seances">Séances <a title="Ajouter une séance" class="addIcon" href="{{url_for('add_seance', sequence_id=sequence.id)}}">Ajouter</a></h2>
+    <h2 id="seances">Séances {% if session.user == sequence.user_login %} <a title="Ajouter une séance" class="addIcon" href="{{url_for('add_seance', sequence_id=sequence.id)}}">Ajouter</a> {% endif %}</h2>
 	<ol class="seance_list">	
 	  {% for seance in sequence.seances %}
 	  <li>

@@ -7,7 +7,7 @@ Bienvenue sur littlefish
 {% block content %}
 <p>Littlefish est une application dédiée à la production de <b>Fiches de préparation</b>.
 </p>
-<a href="{{url_for('user_sequences')}}" class="btn btn-primary btn-large">Voir les fiches</a>
+<a href="{{url_for('user_sequences', user=session.user)}}" class="btn btn-primary btn-large">Voir les fiches</a>
 <a href="{{url_for('register')}}" class="btn btn-success">Créer un compte</a>
 
 {% endblock content %}

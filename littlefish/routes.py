@@ -17,7 +17,7 @@ def index():
     return render_template("index.html")
 
 
-def sequences_page(user=None):
+def sequences_page(user=None, domain=None):
     sequences = (Sequence.query
                 .select_from(Sequence)
                 .join(TopicDomainClass)
@@ -27,12 +27,15 @@ def sequences_page(user=None):
     if session.get('classe', None):
     	sequences = sequences.filter(
 		TopicDomainClass.class_code == session['classe'])
-
     if user:
       sequences = sequences.filter(Sequence.user_login==user)
+    domains = Domain.query.all()
+    if domain:
+      sequences = sequences.filter(Domain.code==domain)
     sequences = sequences.all()
     return render_template('sequences.html', sequences=sequences,
-		    user=user)
+		    domain_code=domain,
+		    user=user, domains=domains)
 
 
 @app.route('/sequences/<string:user>/')
@@ -40,6 +43,14 @@ def sequences_page(user=None):
 def user_sequences(user=None):
     """Index page"""
     return sequences_page(user)
+
+@app.route('/domain/<string:domain>/')
+@app.route('/domain/<string:domain>/<string:user>/')
+def domain(domain, user=None):
+    """Index page"""
+    return sequences_page(user=user, domain=domain)
+
+
 
 
 @app.route('/change_class/', methods=('GET', 'POST',))
@@ -77,10 +88,13 @@ def disconnect():
   return redirect('/', code=303)
 
 class RegisterForm(Form):
-  login = TextField('Login')
-  password = PasswordField('Mot de passe')
+  login = TextField('Login', [validators.Required()])
+  password = PasswordField('Mot de passe', [validators.Required()])
   password_bis = PasswordField(u'Mot de passe (vérification)',
 		  [validators.equal_to('password')])
+  firstname = TextField('Prénom', [validators.Required()])
+  lastname = TextField('Nom', [validators.Required()])
+  email = TextField('Courriel', [validators.Required()])
 
 @app.route('/register/', methods=('GET', 'POST'))
 def register():
@@ -91,8 +105,7 @@ def register():
 	return render_template('wtforms/form.jinja2', form=form,
             title=u"S'inscrire")
     user = User()
-    user.login = form.login.data
-    user.password = pwd_ctx.encrypt(form.password.data)
+    form.populate_obj(user)
     db.session.add(user)
     session['user'] = user.login
     db.session.commit()

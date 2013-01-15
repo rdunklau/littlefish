@@ -1,11 +1,13 @@
 begin;
 create table "user" (
 	login varchar primary key,
-	password varchar
+	password varchar,
+	email varchar not null,
+	firstname varchar not null,
+	lastname varchar not null
 );
 
-insert into "user" (login, password) values  ('bleue', '$6$rounds=64927$uTk4QmsranPbk.1i$cQXcydf4GJiZLkjre3lItFNtTDoClxEWyVSWHU4vyl6v2Acbg5L7xIIwQbWIQorRKh/6HSR8uulVv4ZMbpreb/');
-insert into "user" (login, password) values ('test', '$6$rounds=60606$hQJZa6u9PqHU4K0V$5dP9mbUUnDkuBw3OB8yH6KE75i9eCOjz6LBtNuNiR0k4sMw9ueEZxLT2/FxtJpo3etY7xcT3VHCq797yxn3bE1')
+insert into "user" (login, password, email, firstname, lastname) values  ('bleue', '$6$rounds=64927$uTk4QmsranPbk.1i$cQXcydf4GJiZLkjre3lItFNtTDoClxEWyVSWHU4vyl6v2Acbg5L7xIIwQbWIQorRKh/6HSR8uulVv4ZMbpreb/', 'anne@dupressoir.com', 'Anne', 'Dupressoir');
 
 alter table sequence add column user_login varchar not null references "user"(login) default 'bleue';
 alter table seance add column user_login varchar not null references "user"(login) default 'bleue';
