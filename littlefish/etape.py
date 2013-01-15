@@ -9,7 +9,8 @@ from littlefish.db import db, Class, Seance, DomainClass, TopicDomainClass,\
 from littlefish.dojo import TextField, SelectField, TreeField, TreeLevel,\
     ListField, TimeField
 from littlefish.utils import storify, move
-from flaskext.wtf import Form, validators
+from flaskext.wtf import validators
+from littlefish.forms import Form
 from sqlalchemy.sql import func
 
 

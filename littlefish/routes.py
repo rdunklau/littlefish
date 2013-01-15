@@ -1,18 +1,20 @@
+# -*- coding: utf-8 -*-
 """Base views"""
 from flask import (render_template, session, request, redirect, url_for,
     send_from_directory, flash)
 from littlefish import app, db
-from littlefish.db import Sequence, TopicDomainClass, Topic, Domain, User
+from littlefish.db import Sequence, TopicDomainClass, Topic, Domain, User, db
 # Load routes
 from littlefish import sequence, xhr, seance, etape
-from flaskext.wtf import Form, validators
+from flaskext.wtf import validators
+from littlefish.forms import Form
 from littlefish.dojo import TextField, PasswordField
 from passlib.apps import custom_app_context as pwd_ctx
 
 @app.route('/')
 def index():
     """Index page"""
-    return sequences_page(session['user'])
+    return render_template("index.html")
 
 
 def sequences_page(user=None):
@@ -29,7 +31,7 @@ def sequences_page(user=None):
     if user:
       sequences = sequences.filter(Sequence.user_login==user)
     sequences = sequences.all()
-    return render_template('index.html', sequences=sequences,
+    return render_template('sequences.html', sequences=sequences,
 		    user=user)
 
 
@@ -65,7 +67,7 @@ def login():
       session['user'] = user.login
       return redirect('/', code=303)
     else:
-      flash(u'Mauvais login ou mot de passe')
+      flash(u'Mauvais login ou mot de passe', 'error')
   return render_template('wtforms/form.jinja2', form=form,
             title=u'Se connecter')
 
@@ -73,3 +75,28 @@ def login():
 def disconnect():
   session.pop('user', None)
   return redirect('/', code=303)
+
+class RegisterForm(Form):
+  login = TextField('Login')
+  password = PasswordField('Mot de passe')
+  password_bis = PasswordField(u'Mot de passe (vérification)',
+		  [validators.equal_to('password')])
+
+@app.route('/register/', methods=('GET', 'POST'))
+def register():
+  form = RegisterForm()
+  if form.validate_on_submit():
+    if User.query.filter_by(login=form.login.data).first():
+	flash(u'Ce login est déjà pris', 'error')
+	return render_template('wtforms/form.jinja2', form=form,
+            title=u"S'inscrire")
+    user = User()
+    user.login = form.login.data
+    user.password = pwd_ctx.encrypt(form.password.data)
+    db.session.add(user)
+    session['user'] = user.login
+    db.session.commit()
+    flash(u'Félicitations, votre compte a été créé', 'success')
+    return redirect(url_for('user_sequences'))
+  return render_template('wtforms/form.jinja2', form=form,
+            title=u"S'inscrire")

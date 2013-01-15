@@ -10,7 +10,8 @@ from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
 from littlefish.utils import storify, copy_entity
 from sqlalchemy import func
 
-from flaskext.wtf import Form, validators
+from flaskext.wtf import validators
+from littlefish.forms import Form
 from weasyprint import HTML, CSS
 from StringIO import StringIO
 

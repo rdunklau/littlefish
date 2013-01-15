@@ -6,7 +6,8 @@ from littlefish import app
 from littlefish.db import db, Sequence, Seance
 from littlefish.dojo import TextField, RichTextField
 from littlefish.utils import move
-from flaskext.wtf import Form, validators
+from flaskext.wtf import validators
+from littlefish.forms import Form
 from sqlalchemy.sql import func
 
 
