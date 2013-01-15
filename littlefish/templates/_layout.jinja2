@@ -22,7 +22,7 @@
    <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-	  <a class="brand" href="#">Littlefish</a>
+	  <a class="brand" href="{{url_for('index')}}">Littlefish</a>
 	  <a class="brand" href="#">{{ session.classe }}</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
@@ -44,6 +44,7 @@
               {% endfor %}
                 </ul>
           </li>
+	  <li><a href="mailto:ronan@dunklau.fr">Contact</a></li>
           <li>
             {% if not session['user'] %}
             <form class="navbar-form pull-right" action="{{url_for('login')}}" method="POST">
