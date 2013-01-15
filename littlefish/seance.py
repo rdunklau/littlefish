@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Views managing a seance"""
-from flask import render_template, redirect, url_for, g
+from flask import render_template, redirect, url_for, g, session
+from werkzeug.exceptions import Forbidden
 from littlefish import app
 from littlefish.db import db, Sequence, Seance
 from littlefish.dojo import TextField, RichTextField
@@ -28,6 +29,8 @@ def seance(seance_id):
 def edit_seance(seance_id):
     """Edit seance view"""
     seance_item = Seance.query.get_or_404(seance_id)
+    if seance_item.user_login != session['user']:
+      raise Forbidden()
     g.breadcrumb = [(seance_item.sequence.title, url_for('sequence',
         sequence_id=seance_item.sequence_id)),
         (seance_item.title, url_for('seance', seance_id=seance_id))]
@@ -46,10 +49,14 @@ def add_seance(sequence_id):
     """Add seance view"""
     form = SeanceForm()
     seq = Sequence.query.get_or_404(sequence_id)
+    if seq.user_login != session['user']:
+      raise Forbidden()
+
     g.breadcrumb = [(seq.title, url_for('sequence',
         sequence_id=sequence_id))]
     if form.validate_on_submit():
         seance_item = Seance()
+        seance_item.user_login = session['user']
         seance_item.sequence_id = sequence_id
         form.populate_obj(seance_item)
         seance_item.ordinal = (db.session.query(func.max(Seance.ordinal) +
@@ -65,6 +72,8 @@ def add_seance(sequence_id):
 @app.route('/seance/<int:seance_id>/move/<any(up, down):direction>')
 def move_seance(seance_id, direction):
     seance = Seance.query.get_or_404(seance_id)
+    if seance.user_login != session['user']:
+      raise Forbidden()
     move(seance, direction, 'sequence_id')
     db.session.commit()
     return redirect(url_for('sequence', sequence_id=seance.sequence_id),

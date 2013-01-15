@@ -29,6 +29,8 @@ def copy_entity(entity, visited=None):
         return visited[entity]
     new_entity = entity.__class__()
     visited[entity] = new_entity
+    if hasattr(entity.__class__, 'copy_of'):
+    	new_entity.copy_of = entity
     for prop in object_mapper(entity).iterate_properties:
         if isinstance(prop, ColumnProperty):
             if not any([column.primary_key for column in prop.columns]):

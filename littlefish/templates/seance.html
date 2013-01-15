@@ -1,5 +1,7 @@
 {% extends '_layout.jinja2' %}
-{% block title %} {{seance.title}} <a class="editIcon" title="Modifier" href="{{url_for('edit_seance', seance_id=seance.id)}}">Modifier</a> {% endblock title %}
+{% block title %} {{seance.title}} 
+{% if seance.user_login == session.user %}
+<a class="editIcon" title="Modifier" href="{{url_for('edit_seance', seance_id=seance.id)}}">Modifier</a> {% endif %} {% endblock title %}
 
 {% block content %}
 <article>
@@ -20,12 +22,18 @@
 	  <tbody>
 	  {% for etape in seance.etapes %}
 	  <tr>
-		<td>
+        <td>
+
+          {% if etape.user_login == session.user %}
 		  <a class="upIcon big" href="{{url_for('move_etape', etape_id=etape.etape_id, direction='up')}}">Monter</a>
-		  <a class="downIcon big" href="{{url_for('move_etape', etape_id=etape.etape_id, direction='down')}}">Descendre</a>
+          <a class="downIcon big" href="{{url_for('move_etape', etape_id=etape.etape_id, direction='down')}}">Descendre</a>
+          {% endif %}
 		</td>
-		<td>
-		  <a class="editIcon" href="{{url_for('edit_etape', seance_id=seance.id, ordinal=etape.ordinal)}}" title="Édition">modifier</a>
+        <td>
+
+          {% if etape.user_login == session.user %}
+          <a class="editIcon" href="{{url_for('edit_etape', seance_id=seance.id, ordinal=etape.ordinal)}}" title="Édition">modifier</a>
+          {% endif %}
 	  </td>
 		<td>{{etape.title}} {{etape.time}} </td>
 		<td>{{etape.objectif}}</td>

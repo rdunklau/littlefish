@@ -2,6 +2,7 @@
 """Sequence views"""
 from flask import render_template, redirect, url_for, session, g, current_app
 from flask.helpers import make_response
+from werkzeug.exceptions import Forbidden
 from littlefish import app
 from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
     Domain, Topic, Etape, Seance)
@@ -25,28 +26,32 @@ def classes_select():
 @app.route('/sequence/xhr/Domain')
 def domain_select():
     """JSON view of the domains for current class"""
-    return storify(db.session.query(DomainClass.id,
-            Domain.label,
-            Class.code.label('parent'))
-        .select_from(DomainClass)
-        .join(Domain)
-        .join(Class)
-        .filter(Class.code == session['classe'])
-        .all())
+    query = (db.session.query(DomainClass.id,
+		              Domain.label,
+		              Class.code.label('parent'))
+              .select_from(DomainClass)
+              .join(Domain)
+              .join(Class))
+    if session.get('classe', None):
+    	query = query.filter(Classe.code == session['classe'])
+
+    return storify(query.all())
 
 
 @app.route('/sequence/xhr/Topic')
 def topic_select():
     """JSON view for all topic attached to the current class"""
-    return storify(db.session.query(TopicDomainClass.id,
-            Topic.label,
-            DomainClass.id.label('parent'))
-        .select_from(TopicDomainClass)
-        .join(DomainClass)
-        .join(Class)
-        .filter(Class.code == session['classe'])
-        .join(Topic)
-        .all())
+    query = (db.session.query(TopicDomainClass.id,
+	                      Topic.label,
+                    	      DomainClass.id.label('parent'))
+	     .select_from(TopicDomainClass)
+	    .join(DomainClass)
+            .join(Class)
+            .join(Topic))
+
+    if session.get('classe', None):
+    	query = query.filter(Classe.code == session['classe'])
+    return storify(query.all())
 
 
 class SequenceForm(Form):
@@ -90,8 +95,11 @@ def sequence(sequence_id):
 def edit_sequence(sequence_id):
     """Edit sequence view"""
     seq = Sequence.query.get_or_404(sequence_id)
+    if seq.user_login != session['user']:
+      raise Forbidden()
     g.breadcrumb = [(seq.title, url_for('sequence', sequence_id=sequence_id))]
     form = SequenceForm(obj=seq)
+
     if form.validate_on_submit():
         form.populate_obj(seq)
         db.session.add(seq)
@@ -109,8 +117,11 @@ def edit_sequence(sequence_id):
 def add_sequence():
     """Add sequence view"""
     form = SequenceForm()
+    if not session['user']:
+        raise Forbidden()
     if form.validate_on_submit():
         seq = Sequence()
+        seq.user_login = session['user']
         form.populate_obj(seq)
         db.session.add(seq)
         db.session.commit()
@@ -198,12 +209,15 @@ def copy_sequence(sequence_id):
     seq = Sequence.query.get_or_404(sequence_id)
     newseq = copy_entity(seq)
     newseq.title = 'Copie de %s' % newseq.title
+    newseq.user_login = session['user']
     db.session.add(newseq)
     for seance in seq.seances:
         newseance = copy_entity(seance)
+        newseance.user_login = session['user']
         db.session.add(newseance)
         for etape in seance.etapes:
             newetape = copy_entity(etape)
+            newetape.user_login = session['user']
             db.session.add(newetape)
             newseance.etapes.append(newetape)
         newseq.seances.append(newseance)

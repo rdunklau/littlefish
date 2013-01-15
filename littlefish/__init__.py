@@ -25,8 +25,10 @@ from littlefish import routes
 def inject_classes():
     """Middleware ensuring that a class is selected at all time"""
     g.classes = db.Class.query.all()
-    if ('classe' not in session and
-            request.endpoint not in ('static', 'change_class',
-                'select_class', None)):
-        session['last_url'] = request.url
-        return redirect(url_for('select_class'), 303)
+    if 'user' not in session:
+      session['user'] = None
+
+@app.context_processor
+def inject_form():
+  form = routes.LoginForm()
+  return {'loginform': form}

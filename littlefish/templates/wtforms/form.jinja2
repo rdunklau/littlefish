@@ -1,7 +1,7 @@
 {% extends '_layout.jinja2' %}
 
 {% macro wtfield(field) %}
-  {% if field.name != 'csrf' %}
+  {% if field.name not in ('csrf', 'csrf_token') %}
 	{% if field.errors %}
 	  {{ field.label(title=', '.join(field.errors)) }}
 	{% else %}
@@ -17,8 +17,8 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro wtform(form, url="", submittxt="Valider") %}
-  <form method="POST" {{'action="%s"' % url if url}} enctype="multipart/form-data" data-form="true">
+{% macro wtform(form, url="", submittxt="Valider", class="") %}
+  <form method="POST" {{'action="%s"' % url if url}} enctype="multipart/form-data" data-form="true" {{'class="%s"' % class if class}}>
     {{ inner_wtform(form) | safe }}
 	<input type="hidden" id="base_filter" value="{{base_filter}}"/>
     <input type="submit" id="{{submittxt}}" name="{{submittxt}}" value="{{submittxt}}"/>

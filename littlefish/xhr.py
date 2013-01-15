@@ -1,5 +1,5 @@
 """Views for xhr requests"""
-from flask import request
+from flask import request, session
 from littlefish import app
 from littlefish.db import Sequence, TopicDomainClass, Seance, Etape, db
 from littlefish.utils import storify
@@ -12,7 +12,8 @@ def suggest_sequence(attribute):
     entity = Sequence
     query = (db.session.query(func.unnest(getattr(entity, attribute))
             .label('label'))
-            .distinct())
+            .distinct()
+            .filter(entity.user_login == session['user']))
     if request.values:
         query = query.join(TopicDomainClass)
         for key, value in request.values.items():
@@ -27,7 +28,8 @@ def suggest_etape(attribute):
     entity = Etape
     query = (db.session.query(func.unnest(getattr(entity, attribute))
             .label('label'))
-            .distinct())
+            .distinct()
+            .filter(entity.user_login == session['user']))
     if request.values:
         query = (query.join(Seance)
                     .join(Sequence)

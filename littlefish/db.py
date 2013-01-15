@@ -25,6 +25,8 @@ class Sequence(db.Model):
     topic_assoc = relationship('TopicDomainClass', backref=backref('sequences',
         lazy='joined'),
             lazy='joined')
+    user = relationship('User')
+    copy_of = relationship('Sequence')
 
 
 class Seance(db.Model):
@@ -35,7 +37,8 @@ class Seance(db.Model):
             lazy='joined')
     topic_assoc = relationship('TopicDomainClass',
             secondary='sequence')
-
+    user = relationship('User')
+    copy_of = relationship('Seance')
 
 class Etape(db.Model):
     """An Etape is the third level of organization"""
@@ -43,7 +46,8 @@ class Etape(db.Model):
     seance = relationship('Seance', backref=backref('etapes', lazy='joined',
         order_by='Etape.ordinal'),
             lazy='joined')
-
+    user = relationship('User')
+    copy_of = relationship('Etape')
 
 class Class(db.Model):
     """A class (eg, CM1, CM2..)"""
@@ -78,3 +82,7 @@ class TopicDomainClass(db.Model):
     topic = relationship('Topic', lazy='joined')
     grade = relationship('Class', lazy='joined')
     domain = relationship('Domain', lazy='joined')
+
+class User(db.Model):
+  """A user from the application."""
+  __table__ = table('user')

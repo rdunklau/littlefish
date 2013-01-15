@@ -1,49 +1,85 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Littlefish</title>
   <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js" type="text/javascript" data-dojo-config="parseOnLoad: true"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/dijit.xd.js" type="text/javascript"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/dijit-all.xd.js" type="text/javascript"></script>
   <script src="/static/js/coffee-script.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/coffeescript" src="/static/coffee/forms.coffee"></script>
   <link rel="shortcut icon" href="/static/favicon.ico" />
   <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}" />
   <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/themes/nihilo/nihilo.css" />
-  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
 </head>
 <body class="nihilo">
+
   <header>
-  <ul class="sequence">
+   <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+	  <a class="brand" href="#">Littlefish</a>
+	  <a class="brand" href="#">{{ session.classe }}</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="{{url_for('index')}}">Accueil</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fiches<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{url_for('user_sequences', user=session.user)}}">Mes fiches</a></li>
+                  <li><a href="{{url_for('user_sequences')}}">Toutes les fiches</a></li>
+                </ul>
+              </li>
+          <li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{session.classe or 'Classes'}}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+              {% for classe in g.classes %}
+                  <li {{'class="active"' if classe.code == session.classe}}><a href="{{url_for('change_class', classe=classe.code)}}">{{classe.code}}</a></li>
+              {% endfor %}
+                </ul>
+          </li>
+          <li>
+            {% if not session['user'] %}
+            <form class="navbar-form pull-right" action="{{url_for('login')}}" method="POST">
+              <input class="span2" name="login" type="text" placeholder="Login">
+              <input class="span2" name="password" type="password" placeholder="Password">
+              {{ loginform.csrf_token() | safe }}
+              <button type="submit" class="btn">Se connecter</button>
+            </form>
+            {% else %}
+            <a class="pull-right" href="{{url_for('disconnect')}}">Déconnexion</a>
+            {% endif %} 
+          </li>
+          </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+  </header>
+  </ul>
+
+  <section class="content container">
   {% for category, msgs in get_flashed_messages(with_categories=true) | sort(0) | groupby(0) %}
-  <li class="message {{ category }}">
+
+  <div class="alert alert-block alert-{{category}}">
   	{% for category, msg in msgs %}
 		{{ msg }}
-  	{% endfor %}
-  </li>
+	{% endfor %}
+  </div>
   {% endfor %}
-  </ul>
-  <ul class="breadcrumb">
-	<li><a href="/">Accueil</a></li>
-  {% for link, url in g.breadcrumb %}
-	<li><a href="{{url}}">{{link | truncate(20)}}</a></li>
-  {% endfor %}
-  </ul>
-  {% if session.classe %}
-  <form action="{{url_for('change_class')}}" method="post">
-	<label for="classe">Classe</label>
-	<select name="classe" id="classe">
-	  {% for classe in g.classes %}
-	  <option value="{{classe.code}}" {{'selected="selected"' if classe.code == session.classe}}>{{classe.code}}</option>
-	  {% endfor %}
-	</select>
-	<input type="submit" value="Changer!"/>
-  </form>
+  {% if not session.classe %}
+  <div class="alert alert-danger">
+     Vous devriez choisir une classe avant toute chose (menu du haut)
+  </div>
   {% endif %}
-  </header>
-  <section class="content">
+
   <h1>{% block title %}Little fish{% endblock title %}</h1>
+
   {% block content %}{% endblock content %}
   </section>
 </body>

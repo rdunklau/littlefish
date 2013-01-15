@@ -2,6 +2,7 @@
 """Views for managing an etape"""
 
 from flask import render_template, redirect, url_for, request, session, g
+from werkzeug.exceptions import Forbidden
 from littlefish import app
 from littlefish.db import db, Class, Seance, DomainClass, TopicDomainClass,\
     Domain, Topic, Etape
@@ -41,6 +42,8 @@ def edit_etape(seance_id, ordinal):
     """Edit etape view"""
     etape = Etape.query.filter_by(seance_id=seance_id, ordinal=ordinal).one()
     seq = etape.seance.sequence
+    if etape.user_login != session['user']:
+      raise Forbidden()
     g.breadcrumb = [(seq.title, url_for('sequence',
         sequence_id=etape.seance.sequence_id)),
         (etape.seance.title, url_for('seance', seance_id=seance_id))]
@@ -59,11 +62,14 @@ def add_etape(seance_id):
     """Add etape view"""
     form = EtapeForm()
     seance = Seance.query.get_or_404(seance_id)
+    if seance.user_login != session['user']:
+      raise Forbidden()
     g.breadcrumb = [(seance.sequence.title, url_for('sequence',
         sequence_id=seance.sequence_id)),
         (seance.title, url_for('seance', seance_id=seance_id))]
     if form.validate_on_submit():
         etape = Etape()
+        etape.user_login = session['user']
         ordinal = (db.session.query(func.max(Etape.ordinal) +
                 1).filter(Etape.seance_id == seance_id)
                 .scalar()) or 1
@@ -80,6 +86,8 @@ def add_etape(seance_id):
 @app.route('/etape/<int:etape_id>/move/<any(up, down):direction>')
 def move_etape(etape_id, direction):
     etape = Etape.query.get_or_404(etape_id)
+    if etape.user_login !=  session['user']:
+      raise Forbidden()
     move(etape, direction, 'seance_id')
     db.session.commit()
     return redirect(url_for('seance', seance_id=etape.seance_id), code=303)

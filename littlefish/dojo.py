@@ -44,6 +44,19 @@ class TextField(wtffields.TextField):
     widget = TextInput()
 
 
+class PasswordInput(TextInput, DojoInput):
+    """A simple text input"""
+
+    dojo_type = 'dijit.form.TextBox'
+    input_type = 'password'
+
+
+
+class PasswordField(wtffields.PasswordField):
+    """Field associated with textinput"""
+    widget = PasswordInput()
+
+
 class RichTextInput(TextInput, DojoInput):
     """A simple text input"""
 
