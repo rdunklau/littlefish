@@ -92,7 +92,7 @@ class RegisterForm(Form):
   password = PasswordField('Mot de passe', [validators.Required()])
   password_bis = PasswordField(u'Mot de passe (vérification)',
 		  [validators.equal_to('password')])
-  firstname = TextField('Prénom', [validators.Required()])
+  firstname = TextField(u'Prénom', [validators.Required()])
   lastname = TextField('Nom', [validators.Required()])
   email = TextField('Courriel', [validators.Required()])
 
