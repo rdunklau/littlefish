@@ -27,8 +27,8 @@ body {
 section.content {
     padding-top: 30px;
     padding-bottom: 30px;
-    padding-left: 5%;
-    padding-right: 5%;
+    padding-left: 10%;
+    padding-right: 10%;
     padding-bottom: 
     overflow: visible;
     -moz-border-radius: 15px;
@@ -38,21 +38,10 @@ section.content {
     margin-right: 5%;
     margin-top: 80px;
 	margin-bottom: 30px;
-    width: 80%;
-    background-repeat: repeat-x;
+    width: 70%;
+    background-repeat: no-repeat;
+    background-position: 30px 10px;
     background-image: url('/static/img/bigfish.png');
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        right bottom,
-        color-stop(0.05, rgb(245,245,245)),
-        color-stop(0.53, rgb(232,232,232))
-    );
-    background-image: -moz-linear-gradient(
-        left top,
-        rgb(245,245,245) 5%,
-        rgb(232,232,232) 53%
-    );
 }
 
 form label {
