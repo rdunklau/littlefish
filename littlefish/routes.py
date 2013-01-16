@@ -106,6 +106,7 @@ def register():
             title=u"S'inscrire")
     user = User()
     form.populate_obj(user)
+    user.password = pwd_ctx.encrypt(user.password)
     db.session.add(user)
     session['user'] = user.login
     db.session.commit()
