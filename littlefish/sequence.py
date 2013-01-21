@@ -34,7 +34,7 @@ def domain_select():
               .join(Domain)
               .join(Class))
     if session.get('classe', None):
-    	query = query.filter(Classe.code == session['classe'])
+    	query = query.filter(Class.code == session['classe'])
 
     return storify(query.all())
 
@@ -51,7 +51,7 @@ def topic_select():
             .join(Topic))
 
     if session.get('classe', None):
-    	query = query.filter(Classe.code == session['classe'])
+    	query = query.filter(Class.code == session['classe'])
     return storify(query.all())
 
 
