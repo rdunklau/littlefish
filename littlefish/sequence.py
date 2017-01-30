@@ -10,12 +10,12 @@ from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
 from littlefish.utils import storify, copy_entity
 from sqlalchemy import func
 
-from flaskext.wtf import validators
+from wtforms import validators
 from littlefish.forms import Form
 from weasyprint import HTML, CSS
-from StringIO import StringIO
+from io import BytesIO 
 
-from pyPdf import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
 
 @app.route('/sequence/xhr/Class/')
@@ -158,17 +158,17 @@ def sequence_pdf(sequence_id):
     html = render_template('print/sequence.jinja2', sequence=seq,
             materiel_pe=materiel_pe,
             materiel_eleve=materiel_eleve)
-    seq_page = StringIO()
+    seq_page = BytesIO()
     HTML(string=html,
             base_url=current_app.static_folder).write_pdf(target=seq_page)
     html = render_template('print/seances_summary.jinja2', sequence=seq)
-    seance_page = StringIO()
+    seance_page = BytesIO()
     HTML(string=html,
             base_url=current_app.static_folder).write_pdf(target=seance_page)
     seances_docs = []
     for seance in seq.seances:
         if seance.etapes:
-            seance_doc = StringIO()
+            seance_doc = BytesIO()
             seances_docs.append(seance_doc)
             css = CSS(string=render_template('print/seances.css.jinja2',
                 title=seance.title, idx=seance.ordinal))
@@ -186,13 +186,12 @@ def sequence_pdf(sequence_id):
         input = PdfFileReader(seance)
         for page in input.pages:
             out.addPage(page)
-    outstream = StringIO()
+    outstream = BytesIO()
     out.write(outstream)
     response = make_response(outstream.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-            "attachment; filename=%s.pdf" % (seq.title.encode('utf8')
-            .replace(' ', '_'))
+            "attachment; filename=%s.pdf" % (seq.title.replace(' ', '_'))
     return response
 
 

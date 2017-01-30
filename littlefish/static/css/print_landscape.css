@@ -1,7 +1,7 @@
 @import './print.css';
 
 @page {
-  -weasy-size: A4 landscape;
+  size: A4 landscape;
   margin: 2cm;
 }
 

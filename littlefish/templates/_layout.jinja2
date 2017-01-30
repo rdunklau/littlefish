@@ -51,7 +51,6 @@
             <form class="navbar-form pull-right" action="{{url_for('login')}}" method="POST">
               <input class="span2" name="login" type="text" placeholder="Login">
               <input class="span2" name="password" type="password" placeholder="Password">
-              {{ loginform.csrf_token() | safe }}
               <button type="submit" class="btn">Se connecter</button>
             </form>
             {% else %}

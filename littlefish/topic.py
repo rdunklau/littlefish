@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, session, g, current_app
 from flask.helpers import make_response
-from flaskext.wtf import Form, validators
+from flask_wtf import Form, validators
 from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
     Domain, Topic, Etape, Seance)
 

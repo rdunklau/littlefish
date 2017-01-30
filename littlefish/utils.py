@@ -3,7 +3,7 @@ from flask import jsonify
 
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.orm import object_mapper
-from sqlalchemy.orm.properties import ColumnProperty, RelationProperty
+from sqlalchemy.orm.properties import ColumnProperty, RelationshipProperty
 from sqlalchemy.sql import and_, func
 
 from littlefish.db import db

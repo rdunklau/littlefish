@@ -1,7 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
+from flipflop import WSGIServer
 from littlefish import app
-from flup.server.fcgi import WSGIServer
+from werkzeug.contrib.fixers import CGIRootFix
 
 app.config['SECRET_KEY'] = 'sklajdlkaj'
+
+app = CGIRootFix(app)
 
 WSGIServer(app).run()

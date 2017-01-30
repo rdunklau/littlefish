@@ -6,7 +6,7 @@ from littlefish import app, db
 from littlefish.db import Sequence, TopicDomainClass, Topic, Domain, User, db
 # Load routes
 from littlefish import sequence, xhr, seance, etape
-from flaskext.wtf import validators
+from wtforms import validators
 from littlefish.forms import Form
 from littlefish.dojo import TextField, PasswordField
 from passlib.apps import custom_app_context as pwd_ctx
@@ -58,7 +58,7 @@ def change_class():
     """Class selection post url"""
     session['classe'] = request.values.get('classe', None)
     if not session['classe']:
-  	return render_template('no_class.html')
+        return render_template('no_class.html')
     url = session.get('last_url', request.referrer)
     session.pop('last_url', None)
     return redirect(url, code=303)
@@ -91,7 +91,7 @@ class RegisterForm(Form):
   login = TextField('Login', [validators.Required()])
   password = PasswordField('Mot de passe', [validators.Required()])
   password_bis = PasswordField(u'Mot de passe (vérification)',
-		  [validators.equal_to('password')])
+                  [validators.equal_to('password')])
   firstname = TextField(u'Prénom', [validators.Required()])
   lastname = TextField('Nom', [validators.Required()])
   email = TextField('Courriel', [validators.Required()])
@@ -101,8 +101,8 @@ def register():
   form = RegisterForm()
   if form.validate_on_submit():
     if User.query.filter_by(login=form.login.data).first():
-	flash(u'Ce login est déjà pris', 'error')
-	return render_template('wtforms/form.jinja2', form=form,
+        flash(u'Ce login est déjà pris', 'error')
+        return render_template('wtforms/form.jinja2', form=form,
             title=u"S'inscrire")
     user = User()
     form.populate_obj(user)

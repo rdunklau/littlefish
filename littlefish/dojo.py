@@ -3,7 +3,7 @@
 import json
 
 from flask import render_template, request
-from flaskext import wtf as flaskwtf
+import flask_wtf
 
 from wtforms import widgets as wtfwidgets
 from wtforms import fields as wtffields
