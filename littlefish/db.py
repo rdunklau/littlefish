@@ -1,6 +1,7 @@
 """SQLAlchemy entities definition"""
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
+from sqlalchemy import Column
 from sqlalchemy.orm import relationship, backref
 
 
@@ -66,10 +67,22 @@ class DomainClass(db.Model):
     grade = relationship(Class, lazy='joined')
 
 
+
 class Topic(db.Model):
     """A specific topic."""
     __table__ = table('topic')
+    topic = relationship('Topic', remote_side=[__table__.c.code])
 
+    @property
+    def path(self):
+        parts = []
+        if self.topic is not None:
+            parts.extend(self.topic.path)
+        parts.append(self.label)
+        return parts
+
+        
+            
 
 class TopicDomainClass(db.Model):
     """Associates a topic to a domain and class"""

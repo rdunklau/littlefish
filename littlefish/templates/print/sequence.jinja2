@@ -30,7 +30,7 @@
 	<table class="def_table">
 	  <tr><td>Niveau</td><td>{{ sequence.topic_assoc.grade.label}}</td></tr>
 	  <tr><td>Domaine disciplinaire</td><td>{{ sequence.topic_assoc.domain.label}}</td></tr>
-	  <tr><td>Discipline</td><td>{{ sequence.topic_assoc.topic.label}}</td></tr>
+	  <tr><td>Discipline</td><td>{{ sequence.topic_assoc.topic.path | join(" > ")}}</td></tr>
 	  <tr><td>Nombre de séances</td><td>{{ sequence.seances | count}}</td></tr>
 	</table>
 	<h2>Titre de la séquence: {{ sequence.title }}</h2>

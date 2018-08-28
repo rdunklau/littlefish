@@ -13,6 +13,7 @@ def suggest_sequence(attribute):
     query = (db.session.query(func.unnest(getattr(entity, attribute))
             .label('label'))
             .distinct()
+            .filter(entity.auto_suggest == True)
             .filter(entity.user_login == session['user']))
     if request.values:
         query = query.join(TopicDomainClass)
@@ -29,6 +30,7 @@ def suggest_etape(attribute):
     query = (db.session.query(func.unnest(getattr(entity, attribute))
             .label('label'))
             .distinct()
+            .filter(entity.auto_suggest == True)
             .filter(entity.user_login == session['user']))
     if request.values:
         query = (query.join(Seance)

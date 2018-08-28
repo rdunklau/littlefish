@@ -49,7 +49,7 @@ make_form = (elem) ->
 
 decorate_input = (li, store, input_template) ->
     input = dojo.query('input', li)[0]
-    input.id = null
+    dojo.removeAttr(input, "id")
     select = new dijit.form.ComboBox(
         store: store
         searchAttr: 'label'
@@ -66,7 +66,9 @@ decorate_input = (li, store, input_template) ->
         title: "supprimer",
         select.domNode, 'after')
     add_input = (evt) ->
-        container = dojo.place(input_template, li, 'after')
+        l = dojo.clone(input_template)
+        delete l.id
+        container = dojo.place(l, li, 'after')
         input = dojo.query('input', container)[0]
         select = decorate_input(container, store, input_template)
         select.setValue('')
@@ -86,6 +88,7 @@ make_array_input = (section) ->
     elem = dojo.query('li', section)[0]
     input_template = '<li>' + dojo.attr(elem, 'innerHTML') + '</li>'
     input = dojo.query('li input', section)[0]
+    delete input.id
     base_url = dojo.attr(input, 'data-datastore-url')
     full_url = base_url
     if dojo.attr(input, 'data-basefilter')

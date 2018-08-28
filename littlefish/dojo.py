@@ -89,9 +89,10 @@ class SelectField(wtffields.SelectField):
 class TreeLevel(object):
     """A level in a tree select"""
 
-    def __init__(self, label='', url=''):
+    def __init__(self, label='', url='', required=True):
         self.label = label
         self.url = url
+        self.required = required
 
 
 class TreeSelect(wtfwidgets.TextInput, DojoInput):

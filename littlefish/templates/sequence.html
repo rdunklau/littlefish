@@ -25,7 +25,9 @@
 	<dl>
 	  <dt>Niveau</dt><dd>{{sequence.topic_assoc.grade.label}}</dd>
 	  <dt>Domaine disciplinaire</dt><dd>{{sequence.topic_assoc.domain.label}}</dd>
-	  <dt>Discipline</dt><dd>{{sequence.topic_assoc.topic.label}}</dd>
+	  <dt>Discipline</dt><dd>
+	  {{sequence.topic_assoc.topic.path | join(",")}}
+	  </dd>
 	</dl>
 	<table class="sequence_table">
 	  <tbody>

@@ -8,7 +8,8 @@ from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
     Domain, Topic, Etape, Seance)
 from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
 from littlefish.utils import storify, copy_entity
-from sqlalchemy import func
+from sqlalchemy import func, literal, tuple_
+from sqlalchemy.orm import aliased
 
 from wtforms import validators
 from littlefish.forms import Form
@@ -16,6 +17,7 @@ from weasyprint import HTML, CSS
 from io import BytesIO 
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
+from collections import namedtuple
 
 
 @app.route('/sequence/xhr/Class/')
@@ -27,12 +29,21 @@ def classes_select():
 @app.route('/sequence/xhr/Domain')
 def domain_select():
     """JSON view of the domains for current class"""
+    if not session.get('classe'):
+        label = Domain.label + ' ( ' + DomainClass.class_code + ' ) '
+    else:
+        label = Domain.label
     query = (db.session.query(DomainClass.id,
-		              Domain.label,
+		              label.label('label'),
 		              Class.code.label('parent'))
               .select_from(DomainClass)
               .join(Domain)
-              .join(Class))
+              .join(Class)
+              .filter(tuple_(DomainClass.class_code, DomainClass.domain_code).in_(
+                 db.session.query(TopicDomainClass.class_code,
+                                  TopicDomainClass.domain_code)
+                 .filter(TopicDomainClass.disabled == False))
+                  ))
     if session.get('classe', None):
     	query = query.filter(Class.code == session['classe'])
 
@@ -42,17 +53,66 @@ def domain_select():
 @app.route('/sequence/xhr/Topic')
 def topic_select():
     """JSON view for all topic attached to the current class"""
+    if not session.get('classe'):
+        label = Topic.label + ' ( ' + DomainClass.class_code + ' ) '
+    else:
+        label = Topic.label
     query = (db.session.query(TopicDomainClass.id,
-	                      Topic.label,
+		              label.label('label'),
                     	      DomainClass.id.label('parent'))
 	     .select_from(TopicDomainClass)
 	    .join(DomainClass)
             .join(Class)
-            .join(Topic))
+            .join(Topic)
+            .filter(TopicDomainClass.disabled == False)
+            .filter(Topic.parent_topic_code == None))
 
     if session.get('classe', None):
     	query = query.filter(Class.code == session['classe'])
     return storify(query.all())
+
+
+@app.route('/sequence/xhr/SubTopic')
+def subtopic_select():
+    """JSON view for all topic attached to the current class"""
+    parent_topic = aliased(Topic) 
+    parent_domainclass = aliased(TopicDomainClass)
+    if not session.get('classe'):
+        label = Topic.label + ' ( ' + DomainClass.class_code + ' ) '
+    else:
+        label = Topic.label
+    query = (db.session.query(TopicDomainClass.id,
+		              label.label('label'),
+                    	      parent_domainclass.id.label('parent'))
+	     .select_from(TopicDomainClass)
+	    .join(DomainClass)
+            .join(Class)
+            .join(Topic)
+            .join(parent_domainclass,
+                (parent_domainclass.topic_code == Topic.parent_topic_code) &
+                (parent_domainclass.domain_code == DomainClass.domain_code) &
+                (parent_domainclass.class_code == DomainClass.class_code))
+
+            .filter(TopicDomainClass.disabled == False)
+            .filter(Topic.parent_topic_code != None))
+    if session.get('classe', None):
+    	query = query.filter(Class.code == session['classe'])
+    res = query.all()
+    query = (db.session.query(
+        TopicDomainClass.id,
+        literal("Aucune").label("label"),
+        TopicDomainClass.id.label('parent'))
+        .select_from(TopicDomainClass)
+        .join(DomainClass)
+        .join(Class)
+        .join(Topic)
+        .filter(TopicDomainClass.disabled == False)
+        .filter(Topic.parent_topic_code == None))
+
+    if session.get('classe', None):
+    	query = query.filter(Class.code == session['classe'])
+    res.extend(query.all())
+    return storify(res)
 
 
 class SequenceForm(Form):
@@ -60,7 +120,8 @@ class SequenceForm(Form):
     title = TextField(u'Titre', [validators.Required()])
     topic_domain_class = TreeField(u'', levels=[
         TreeLevel('Domaine Disciplinaire', '/sequence/xhr/Domain'),
-        TreeLevel('Discipline', '/sequence/xhr/Topic')])
+        TreeLevel('Discipline', '/sequence/xhr/Topic'),
+        TreeLevel('Sous-Discipline', '/sequence/xhr/SubTopic', required=False)])
     programmes = ListField('Programmes',
             url='/xhr/suggest/Sequence/programmes',
             base_filter='topic_domain_class')
