@@ -1,4 +1,4 @@
-from flask_wtf import Form as BaseForm
+from flask_wtf import FlaskForm as BaseForm
 from flask import flash
 
 class Form(BaseForm):
