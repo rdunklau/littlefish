@@ -6,7 +6,7 @@ from werkzeug.exceptions import Forbidden
 from littlefish import app
 from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
     Domain, Topic, Etape, Seance)
-from littlefish.dojo import (TextField, TreeField, TreeLevel, ListField)
+from littlefish.dojo import (StringField, TreeField, TreeLevel, ListField)
 from littlefish.utils import storify, copy_entity
 from sqlalchemy import func, literal, tuple_
 from sqlalchemy.orm import aliased
@@ -117,7 +117,7 @@ def subtopic_select():
 
 class SequenceForm(Form):
     """Form for managing sequences"""
-    title = TextField(u'Titre', [validators.Required()])
+    title = StringField(u'Titre', [validators.InputRequired()])
     topic_domain_class = TreeField(u'', levels=[
         TreeLevel('Domaine Disciplinaire', '/sequence/xhr/Domain'),
         TreeLevel('Discipline', '/sequence/xhr/Topic'),

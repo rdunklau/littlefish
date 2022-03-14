@@ -6,8 +6,8 @@ from littlefish.db import (db, Class, Sequence, DomainClass, TopicDomainClass,
 
 
 class TopicForm(Form):
-	code = TextField(u'Code',  [validators.Required()])
-	label = TextField(u'Titre', [validators.Required()])
+	code = StringField(u'Code',  [validators.InputRequired()])
+	label = StringField(u'Titre', [validators.InputRequired()])
 
 
 @app.route('/topic/add/', methods=('GET', 'POST'))

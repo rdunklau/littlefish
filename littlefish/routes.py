@@ -8,7 +8,7 @@ from littlefish.db import Sequence, TopicDomainClass, Topic, Domain, User, db
 from littlefish import sequence, xhr, seance, etape
 from wtforms import validators
 from littlefish.forms import Form
-from littlefish.dojo import TextField, PasswordField
+from littlefish.dojo import StringField, PasswordField
 from passlib.apps import custom_app_context as pwd_ctx
 
 @app.route('/')
@@ -66,7 +66,7 @@ def change_class():
 
 
 class LoginForm(Form):
-  login = TextField()
+  login = StringField()
   password = PasswordField()
 
 @app.route('/login/', methods=('GET', 'POST'))
@@ -88,13 +88,13 @@ def disconnect():
   return redirect('/', code=303)
 
 class RegisterForm(Form):
-  login = TextField('Login', [validators.Required()])
-  password = PasswordField('Mot de passe', [validators.Required()])
+  login = StringField('Login', [validators.InputRequired()])
+  password = PasswordField('Mot de passe', [validators.InputRequired()])
   password_bis = PasswordField(u'Mot de passe (vérification)',
                   [validators.equal_to('password')])
-  firstname = TextField(u'Prénom', [validators.Required()])
-  lastname = TextField('Nom', [validators.Required()])
-  email = TextField('Courriel', [validators.Required()])
+  firstname = StringField(u'Prénom', [validators.InputRequired()])
+  lastname = StringField('Nom', [validators.InputRequired()])
+  email = StringField('Courriel', [validators.InputRequired()])
 
 @app.route('/register/', methods=('GET', 'POST'))
 def register():

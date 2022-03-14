@@ -6,7 +6,7 @@ from werkzeug.exceptions import Forbidden
 from littlefish import app
 from littlefish.db import db, Class, Seance, DomainClass, TopicDomainClass,\
     Domain, Topic, Etape
-from littlefish.dojo import TextField, SelectField, TreeField, TreeLevel,\
+from littlefish.dojo import StringField, SelectField, TreeField, TreeLevel,\
     ListField, TimeField
 from littlefish.utils import storify, move
 from wtforms import validators
@@ -16,9 +16,9 @@ from sqlalchemy.sql import func
 
 class EtapeForm(Form):
     """The form  defining an etape"""
-    title = TextField(u'Titre', [validators.Required()])
+    title = StringField(u'Titre', [validators.InputRequired()])
     time = TimeField(u'Durée')
-    objectif = TextField(u'Objectif', [validators.Required()])
+    objectif = StringField(u'Objectif', [validators.InputRequired()])
     dispositif = ListField(u'Dispositif', url='/xhr/suggest/Etape/dispositif')
     deroulement = ListField(u'Déroulement',
             url='/xhr/suggest/Etape/deroulement')

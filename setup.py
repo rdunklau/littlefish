@@ -20,7 +20,7 @@ options = dict(
     platforms="Any",
     packages=find_packages(),
     install_requires=["flask>=0.8", 'flask-sqlalchemy', 'Flask-WTF', 'psycopg2',
-        'WeasyPrint', 'pyPdf'],
+        'WeasyPrint', 'pyPdf2', 'passlib'],
     classifiers=[
         "Development Status :: WIP",
         "Intended Audience :: Public",

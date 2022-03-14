@@ -26,7 +26,7 @@ class DojoInput(wtfwidgets.Input):
         attrs.setdefault('value', field.data)
         attrs.update(kwargs.pop('options', {}))
         for validator in field.validators:
-            if isinstance(validator, validators.Required):
+            if isinstance(validator, validators.InputRequired):
                 attrs['required'] = 'required'
         return wtfwidgets.HTMLString(render_template(self.__template__,
             attrs=attrs, **kwargs))
@@ -38,7 +38,7 @@ class TextInput(wtfwidgets.TextInput, DojoInput):
     dojo_type = 'dijit.form.ValidationTextBox'
 
 
-class TextField(wtffields.TextField):
+class StringField(wtffields.StringField):
     """Field associated with textinput"""
 
     widget = TextInput()
@@ -63,7 +63,7 @@ class RichTextInput(TextInput, DojoInput):
     dojo_type = 'dijit.form.Textarea'
 
 
-class RichTextField(wtffields.TextField):
+class RichStringField(wtffields.StringField):
     """Field associated with richtextinput"""
 
     widget = RichTextInput()
@@ -134,7 +134,7 @@ class TreeSelect(wtfwidgets.TextInput, DojoInput):
         return wtfwidgets.HTMLString(html_string)
 
 
-class TreeField(wtffields.TextField):
+class TreeField(wtffields.StringField):
     """Field associated with the TreeSelect"""
 
     widget = TreeSelect()
@@ -168,7 +168,7 @@ class ListInput(RichTextInput):
             attrs=attrs, values=field.data or [], **kwargs))
 
 
-class ListField(wtffields.TextField):
+class ListField(wtffields.StringField):
     """The field associated to the ListInput"""
 
     widget = ListInput()
@@ -206,7 +206,7 @@ class TimeInput(wtfwidgets.TextInput, DojoInput):
         return super(TimeInput, self).__call__(field, **kwargs)
 
 
-class TimeField(wtffields.TextField):
+class TimeField(wtffields.StringField):
     """The field associated with the TimeInput"""
 
     widget = TimeInput()

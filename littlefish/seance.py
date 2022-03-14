@@ -4,7 +4,7 @@ from flask import render_template, redirect, url_for, g, session
 from werkzeug.exceptions import Forbidden
 from littlefish import app
 from littlefish.db import db, Sequence, Seance
-from littlefish.dojo import TextField, RichTextField
+from littlefish.dojo import StringField, RichStringField
 from littlefish.utils import move
 from wtforms import validators
 from littlefish.forms import Form
@@ -13,8 +13,8 @@ from sqlalchemy.sql import func
 
 class SeanceForm(Form):
     """A basic form for seance"""
-    title = TextField(u'Titre', [validators.Required()])
-    summary = RichTextField(u'Résumé')
+    title = StringField(u'Titre', [validators.InputRequired()])
+    summary = RichStringField(u'Résumé')
 
 
 @app.route('/seance/<int:seance_id>')
