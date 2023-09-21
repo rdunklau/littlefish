@@ -8,6 +8,7 @@ import flask_wtf
 from wtforms import widgets as wtfwidgets
 from wtforms import fields as wtffields
 from wtforms import validators
+from markupsafe import Markup
 
 import datetime
 
@@ -28,7 +29,7 @@ class DojoInput(wtfwidgets.Input):
         for validator in field.validators:
             if isinstance(validator, validators.InputRequired):
                 attrs['required'] = 'required'
-        return wtfwidgets.HTMLString(render_template(self.__template__,
+        return Markup(render_template(self.__template__,
             attrs=attrs, **kwargs))
 
 
@@ -131,7 +132,7 @@ class TreeSelect(wtfwidgets.TextInput, DojoInput):
         parent = '%s-level%i' % (field.id, idx)
         html_string += self.render(level, field.id, field.name, parent,
                 value=field.levels_values[-1])
-        return wtfwidgets.HTMLString(html_string)
+        return Markup(html_string)
 
 
 class TreeField(wtffields.StringField):
@@ -164,7 +165,7 @@ class ListInput(RichTextInput):
         attrs['data-datastore-url'] = field.url
         if field.base_filter:
             attrs['data-basefilter'] = field.base_filter
-        return wtfwidgets.HTMLString(render_template('wtforms/list.jinja2',
+        return Markup(render_template('wtforms/list.jinja2',
             attrs=attrs, values=field.data or [], **kwargs))
 
 
